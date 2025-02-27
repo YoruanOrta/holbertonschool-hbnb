@@ -1,2 +1,2 @@
 # holbertonschool-hbnb
-hbnb
+Project of hbnb
