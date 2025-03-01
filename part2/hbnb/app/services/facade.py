@@ -3,6 +3,7 @@ from app.models import storage
 from app.models import User
 from app.models.amenity import Amenity
 from app.models.place import Place
+from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
@@ -184,3 +185,79 @@ class HBnBFacade:
 
         self.storage.save()
         return {"message": "Place updated successfully"}
+
+    def create_review(self, review_data):
+        user_id = review_data.get("user_id")
+        place_id = review_data.get("place_id")
+        rating = review_data.get("rating")
+        text = review_data.get("text")
+        
+        # Validar si el usuario existe
+        user = storage.get(User, user_id)
+        if not user:
+            print(f"User with ID {user_id} not found")  # Depuración
+            raise ValueError(f"User with ID {user_id} not found")
+        
+        # Validar si el lugar existe
+        place = storage.get(Place, place_id)
+        if not place:
+            print(f"Place with ID {place_id} not found")  # Depuración
+            raise ValueError(f"Place with ID {place_id} not found")
+        
+        # Validar el rating
+        if rating is None or not isinstance(rating, int) or not 1 <= rating <= 5:
+            print(f"Invalid rating: {rating}")  # Depuración
+            raise ValueError("Rating must be an integer between 1 and 5")
+        
+        # Crear la reseña
+        new_review = Review(user_id=user_id, place_id=place_id, rating=rating, text=text)
+        storage.add(new_review)
+        storage.save()
+        print(f"Review created: {new_review}")  # Depuración
+        return new_review
+
+    def get_review(self, review_id):
+        review = storage.get(Review, review_id)
+        if not review:
+            raise ValueError(f"Review with ID {review_id} not found")
+        return review
+
+    # Método para obtener todas las reseñas
+    def get_all_reviews(self):
+        return storage.all(Review)
+
+    # Método para obtener todas las reseñas de un lugar específico
+    def get_reviews_by_place(self, place_id):
+        place = storage.get(Place, place_id)
+        if not place:
+            raise ValueError(f"Place with ID {place_id} not found")
+        
+        return [review for review in place.reviews]
+
+    # Método para actualizar una reseña
+    def update_review(self, review_id, review_data):
+        review = storage.get(Review, review_id)
+        if not review:
+            raise ValueError(f"Review with ID {review_id} not found")
+        
+        # Actualizar los campos de la reseña
+        if 'text' in review_data:
+            review.text = review_data.get('text')
+        if 'rating' in review_data:
+            new_rating = review_data.get('rating')
+            if not isinstance(new_rating, int) or not 1 <= new_rating <= 5:
+                raise ValueError("Rating must be an integer between 1 and 5")
+            review.rating = new_rating
+        
+        storage.save()
+        return review
+
+    # Método para eliminar una reseña
+    def delete_review(self, review_id):
+        review = storage.get(Review, review_id)
+        if not review:
+            raise ValueError(f"Review with ID {review_id} not found")
+        
+        storage.delete(review)
+        storage.save()
+        return {"message": "Review deleted successfully"}
