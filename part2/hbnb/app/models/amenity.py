@@ -11,6 +11,6 @@ class Amenity(BaseModel):
     def __init__(self, name=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name if name else "Unknown"
-        self.place_amenities = []  # List to store related places
-        self.reviews = []  # List to store related reviews
-        self.amenities = []  # List to store related amenities
+        self.place_amenities = []
+        self.reviews = []
+        self.amenities = []

@@ -11,6 +11,7 @@ class MemoryStorage:
 
     def save(self, obj):
         """Guarda un objeto"""
+        print(f"Guardando usuario con ID: {obj.id}")
         self.data[obj.id] = obj
 
-storage = MemoryStorage()  # Instancia de almacenamiento
+storage = MemoryStorage()

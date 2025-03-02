@@ -5,7 +5,6 @@ from app.services.facade import HBnBFacade
 
 api = Namespace('amenities', description='Amenity operations')
 
-# Define the amenity model for input validation and documentation
 amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
 })
@@ -19,12 +18,10 @@ class AmenityList(Resource):
         """Register a new amenity"""
         amenity_data = api.payload
 
-        # Check if the amenity name already exists (you can add more checks here)
         existing_amenity = facade.get_amenity_by_name(amenity_data['name'])
         if existing_amenity:
             return {'error': 'Amenity already exists'}, 400
 
-        # Create new amenity
         new_amenity = facade.create_amenity(amenity_data)
         return {
             'id': new_amenity.id,
@@ -35,11 +32,10 @@ class AmenityList(Resource):
     def get(self):
         """Retrieve a list of all amenities"""
         amenities = HBnBFacade().get_all_amenities()
-        
-        # Convertir las instancias de amenity a un formato serializable (diccionario)
+
         amenities_list = [{'id': amenity.id, 'name': amenity.name} for amenity in amenities]
 
-        return amenities_list, 200  # Devuelve la lista de amenidades
+        return amenities_list, 200
 
 @api.route('/<amenity_id>')
 class AmenityResource(Resource):
@@ -64,7 +60,6 @@ class AmenityResource(Resource):
         if not amenity:
             return {'error': 'Amenity not found'}, 404
 
-        # Update amenity details
         amenity.name = amenity_data['name']
         facade.update_amenity(amenity)
         return {'message': 'Amenity updated successfully'}, 200

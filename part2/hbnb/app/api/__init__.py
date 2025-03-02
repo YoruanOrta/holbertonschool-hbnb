@@ -5,13 +5,10 @@ from app.api.v1.amenities import api as amenities_api
 from app.api.v1.places import api as places_api
 from app.api.v1.reviews import api as reviews_api
 
-# Crear Blueprint para la API
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 
-# Crear la instancia de Api una sola vez
 api = Api(api_bp, version="1.0", title="HBnB API", description="API for the HBnB application", doc="/docs")
 
-# Registrar namespaces
 api.add_namespace(users_api, path="/users")
 api.add_namespace(amenities_api, path="/amenities")
 api.add_namespace(places_api, path="/places")
