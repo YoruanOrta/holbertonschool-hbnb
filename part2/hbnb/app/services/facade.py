@@ -4,6 +4,7 @@ from app.models import User
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.review import Review
+from flask import jsonify
 
 class HBnBFacade:
     def __init__(self):
@@ -14,8 +15,10 @@ class HBnBFacade:
         self.storage = storage
 
     def create_user(self, user_data):
+        print(f"Received user data: {user_data}")
         new_user = User(**user_data)
-        self.user_repo.add(new_user)
+        self.storage.new(new_user)
+        self.storage.save()
         return new_user
 
     def get_user(self, user_id):
