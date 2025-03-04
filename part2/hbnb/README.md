@@ -14,6 +14,7 @@
     - [Amenity Example](#amenity-example)
   - [Responsibilities of the Business Logic Layer](#responsibilities-of-the-business-logic-layer)
   - [Workflow](#workflow)
+  - [AUTHOR](#author)
 
 ---
 
@@ -151,7 +152,7 @@ class Amenity:
 
 ## Usage Examples
 
-### User Example
+User Example
 
 ```python
 user = User(email="john.doe@example.com", first_name="John", last_name="Doe")
@@ -205,5 +206,6 @@ amenity.delete()
  5. Reviews are linked to both users and places.
  6. Amenities can be associated with places.
 
-    AUTHOR:
+## AUTHOR
+
   Yoruan Orta Bonilla
