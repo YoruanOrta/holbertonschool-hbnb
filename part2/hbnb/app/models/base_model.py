@@ -1,8 +1,10 @@
 import uuid
 from datetime import datetime
+""" Base class for all models in the application """
 
 class BaseModel:
     def __init__(self, **kwargs):
+        """ Initialize a new model instance """
         self.id = str(uuid.uuid4()) if 'id' not in kwargs else kwargs['id']
 
         self.created_at = datetime.now() if 'created_at' not in kwargs else kwargs['created_at']
