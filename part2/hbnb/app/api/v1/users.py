@@ -4,7 +4,6 @@ from flask import request, jsonify
 
 api = Namespace('users', description='User operations')
 
-# Define the user model for input validation and documentation
 user_model = api.model('User', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
@@ -13,6 +12,21 @@ user_model = api.model('User', {
 
 @api.route('/')
 class UserList(Resource):
+    @api.response(200, 'List of users retrieved successfully')
+    def get(self):
+        """Retrieve all users"""
+        users = facade.get_all_users()
+        user_list = [
+            {
+                'id': user.id, 
+                'first_name': user.first_name, 
+                'last_name': user.last_name, 
+                'email': user.email
+            } 
+            for user in users
+        ]
+        return user_list, 200
+
     @api.expect(user_model, validate=True)
     @api.response(201, 'User successfully created')
     @api.response(400, 'Email already registered')
@@ -35,7 +49,7 @@ class UserList(Resource):
             }, 201
         
         except ValueError as e:
-            return {'error': 'Invalid input data'}, 400  # Captura error y devuelve JSON con 400
+            return {'error': 'Invalid input data'}, 400
 
 @api.route('/<user_id>')
 class UserResource(Resource):
@@ -46,7 +60,12 @@ class UserResource(Resource):
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
-        return {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}, 200
+        return {
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+        }, 200
 
     @api.expect(user_model, validate=True)
     @api.response(200, 'User updated successfully')
@@ -70,3 +89,12 @@ class UserResource(Resource):
         
         except ValueError as e:
             return {'error': 'Invalid input data'}, 400
+
+    @api.response(200, 'User deleted successfully')
+    @api.response(404, 'User not found')
+    def delete(self, user_id):
+        """Delete a user by ID"""
+        try:
+            return facade.delete_user(user_id)
+        except ValueError as e:
+            return {"error": str(e)}, 404

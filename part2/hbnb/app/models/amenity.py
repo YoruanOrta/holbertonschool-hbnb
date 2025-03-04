@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Amenity(BaseModel):
     name = Column(String(128), nullable=False)
-    place_amenities = relationship('Place', secondary='place_amenity')
+    place_amenities = relationship('Place', secondary='place_amenity', back_populates="amenities", lazy="joined")
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     def __init__(self, name=None, *args, **kwargs):

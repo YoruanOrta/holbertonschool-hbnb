@@ -26,16 +26,15 @@ review_model = api.model('PlaceReview', {
 })
 
 place_model = api.model('Place', {
-    'title': fields.String(required=True, description='Title of the place'),
-    'name': fields.String(required=True, description='Name of the place'),
-    'description': fields.String(description='Description of the place'),
-    'price': fields.Float(required=True, description='Price per night'),
-    'latitude': fields.Float(required=True, description='Latitude of the place'),
-    'longitude': fields.Float(required=True, description='Longitude of the place'),
-    'owner_id': fields.String(required=True, description='ID of the owner'),
-    'owner': fields.Nested(user_model, description='Owner of the place'),
-    'amenities': fields.List(fields.String, required=True, description="List of amenities ID's"),
-    'reviews': fields.List(fields.Nested(review_model), description='List of reviews')
+    "title": fields.String(required=True, description="Title of the place"),
+    "description": fields.String(description="Description of the place"),
+    "price": fields.Float(required=True, description="Price per night"),
+    "latitude": fields.Float(required=True, description="Latitude of the place"),
+    "longitude": fields.Float(required=True, description="Longitude of the place"),
+    "owner_id": fields.String(required=True, description="ID of the owner"),
+    "owner": fields.Nested(user_model, description="Owner of the place"),
+    "amenities": fields.List(fields.String, required=True, description="List of amenities ID's"),
+    "reviews": fields.List(fields.Nested(review_model), description="List of reviews")
 })
 
 @api.route('/')
@@ -46,18 +45,9 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         place_data = request.get_json()
-
         try:
             new_place = facade.create_place(place_data)
-            return {
-                "id": new_place.id,
-                "name": new_place.name,
-                "description": new_place.description,
-                "price": new_place.price,
-                "latitude": new_place.latitude,
-                "longitude": new_place.longitude,
-                "owner_id": new_place.owner_id
-            }, 201
+            return new_place, 201
         except ValueError as e:
             return {"error": str(e)}, 400
 
@@ -65,7 +55,7 @@ class PlaceList(Resource):
     def get(self):
         """Retrieve a list of all places"""
         places = facade.get_all_places()
-        return jsonify(places), 200
+        return places, 200
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -90,6 +80,6 @@ class PlaceResource(Resource):
             updated_place = facade.update_place(place_id, place_data)
             if not updated_place:
                 return {"error": "Place not found"}, 404
-            return updated_place, 200
+            return updated_place, 200 
         except ValueError as e:
             return {"error": str(e)}, 400

@@ -3,6 +3,9 @@ from sqlalchemy import Column, String, Text, Float, ForeignKey
 from sqlalchemy.orm import relationship, validates
 from app.models.base_model import BaseModel
 from app.models.user import User
+from app.models.review import Review
+from app.models.amenity import Amenity
+
 
 class Place(BaseModel):
     title = Column(String(128), nullable=False)
@@ -13,8 +16,8 @@ class Place(BaseModel):
     owner_id = Column(String(60), ForeignKey('users.id'), nullable=False)
 
     owner = relationship("User", back_populates="places")
-    reviews = relationship("Review", back_populates="place", cascade="all, delete")
-    amenities = relationship("Amenity", secondary="place_amenity", back_populates="places")
+    reviews = relationship("Review", back_populates="place", cascade="all, delete", lazy="select")
+    amenities = relationship("Amenity", secondary="place_amenity", back_populates="places", lazy="select")
 
     def __init__(self, title, description, price, latitude, longitude, owner):
         super().__init__()
@@ -24,6 +27,32 @@ class Place(BaseModel):
         self.latitude = self.validate_latitude("latitude", latitude)
         self.longitude = self.validate_longitude("longitude", longitude)
         self.owner = owner
+
+    def to_dict(self):
+        """Convert Place object to a dictionary"""
+        return {
+            "id": str(self.id),
+            "title": self.title,
+            "description": self.description,
+            "price": float(self.price),
+            "latitude": float(self.latitude),
+            "longitude": float(self.longitude),
+            "owner_id": str(self.owner.id) if self.owner else None, 
+            "owner": {
+                "id": str(self.owner.id),
+                "first_name": self.owner.first_name,
+                "last_name": self.owner.last_name,
+                "email": self.owner.email
+            } if self.owner else None,
+            "reviews": [
+                review.to_dict() for review in self.reviews or []
+            ] if isinstance(self.reviews, list) else [],
+            "amenities": [
+                amenity.to_dict() for amenity in self.amenities or []
+            ] if isinstance(self.amenities, list) else [],
+        }
+
+
 
     @validates('title')
     def validate_title(self, key, value):
