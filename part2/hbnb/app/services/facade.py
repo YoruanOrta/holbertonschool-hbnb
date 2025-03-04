@@ -7,9 +7,12 @@ from app.models.review import Review
 from flask import jsonify
 import uuid
 from datetime import datetime
+""" Facade class to interact with the storage and perform business logic """
 
 class HBnBFacade:
+    """ Facade class to interact with the storage and perform business logic """
     def __init__(self):
+        """ Initialize the facade with in-memory repositories """
         self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
@@ -208,25 +211,25 @@ class HBnBFacade:
 #------------------------------------------------------------AMENITIES-----------------------------------------------------------------
 
     def create_amenity(self, amenity_data):
-        """Crea un nuevo amenity y lo almacena"""
+        """Create a new amenity and store it"""
         new_amenity = Amenity(id=str(uuid.uuid4()), name=amenity_data['name'])
         self.amenity_repository.add(new_amenity)
         return new_amenity
 
     def get_amenity_by_name(self, name):
-        """Busca un amenity por nombre"""
+        """Retrieve an amenity by name"""
         return self.amenity_repository.get_by_attribute("name", name)
 
     def get_amenity(self, amenity_id):
-        """Obtiene un amenity por su ID"""
+        """Retrieve an amenity by its ID"""
         return self.amenity_repository.get(amenity_id)
 
     def get_all_amenities(self):
-        """Obtiene todos los amenities almacenados"""
+        """Retrieve all stored amenities"""
         return self.amenity_repository.get_all()
 
     def update_amenity(self, amenity_id, amenity_data):
-        """Actualiza el nombre de un amenity si existe"""
+        """Update the name of an amenity if it exists"""
         amenity = self.get_amenity(amenity_id)
         if amenity:
             amenity.name = amenity_data['name']
