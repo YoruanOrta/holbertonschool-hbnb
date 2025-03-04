@@ -154,7 +154,8 @@ Responsibilities of the Business Logic Layer
 	•	Business Logic Abstraction: The business logic layer encapsulates the logic behind system operations. For example, creating a Place ensures all values are valid before saving them to the database.
 	•	Facilitating Communication with the Presentation Layer: It provides high-level methods that allow the presentation layer (API) to easily interact with the data without worrying about the complexity of database operations.
 
-Workflow
+Workflow:
+
 1.	
 The API controller (presentation layer) receives a request.
 
