@@ -1,169 +1,190 @@
 # HBNB Project - Business Logic Layer
 
-This project is part of the HBNB system, which manages users, places, reviews, and amenities for an accommodation service. Below is a description of the business logic layer, which contains the main entities of the system, their responsibilities, and usage examples.
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Project Structure](#project-structure)
+- [Business Logic Layer](#business-logic-layer)
+  - [Entities](#entities)
+  - [Classes and Methods](#classes-and-methods)
+- [Usage Examples](#usage-examples)
+- [Responsibilities of the Business Logic Layer](#responsibilities-of-the-business-logic-layer)
+- [Workflow](#workflow)
+- [Author](#author)
+
+---
+
+## Introduction
+
+The **HBNB** project is a system for managing users, places, reviews, and amenities in an accommodation service.  
+This document describes the **Business Logic Layer (BLL)**, which handles data processing, entity management, and interactions between the API and the database.
+
+---
+
+## Project Structure
+
+The project follows a **layered architecture**:
+
+1. **Presentation Layer** – The API (Flask) that handles HTTP requests.
+2. **Business Logic Layer (BLL)** – Processes data and enforces business rules.
+3. **Persistence Layer** – Uses SQLAlchemy for database management.
+
+The **Business Logic Layer** acts as an intermediary, ensuring that all operations comply with business rules.
+
+---
 
 ## Business Logic Layer
 
-The business logic layer is responsible for managing business rules, interactions between entities, and communication with the database. This layer acts as an intermediary between the presentation layer (API) and the persistence layer (database), ensuring that operations on data follow business rules.
-
 ### Entities
 
-The main entities managed in this project are:
+The main entities in the system are:
 
-1. **User**
-   - **Responsibility**: Represents a user in the system, with personal information and their role (e.g., regular user, admin).
-   - **Attributes**:
-     - `id`: Unique identifier for the user.
-     - `email`: The user's email address.
-     - `first_name`: The user's first name.
-     - `last_name`: The user's last name.
-   - **Relationships**: Can have multiple `Place` and `Review`.
+| Entity   | Description |
+|----------|------------|
+| **User** | Manages user accounts, authentication, and interactions. |
+| **Place** | Represents accommodations like apartments, houses, and hotels. |
+| **Review** | Stores user-generated reviews for places. |
+| **Amenity** | Represents features available in places (e.g., WiFi, Pool). |
 
-2. **Place**
-   - **Responsibility**: Represents a place where users can stay, such as a hotel, apartment, etc.
-   - **Attributes**:
-     - `id`: Unique identifier for the place.
-     - `name`: The name of the place.
-     - `description`: Description of the place.
-     - `user_id`: The ID of the user who created the place.
-   - **Relationships**: Can have multiple `Review` and may be associated with multiple `Amenity`.
-
-3. **Review**
-   - **Responsibility**: Represents a review left by a user for a place.
-   - **Attributes**:
-     - `id`: Unique identifier for the review.
-     - `text`: The review text.
-     - `rating`: Rating for the place (e.g., 1 to 5).
-     - `place_id`: The ID of the place being reviewed.
-     - `user_id`: The ID of the user who wrote the review.
-   - **Relationships**: Each review is associated with a `User` and a `Place`.
-
-4. **Amenity**
-   - **Responsibility**: Represents an amenity available at a place (e.g., "WiFi", "Air conditioning", etc.).
-   - **Attributes**:
-     - `id`: Unique identifier for the amenity.
-     - `name`: Name of the amenity.
-   - **Relationships**: Can be associated with multiple `Place`.
+---
 
 ### Classes and Methods
 
-1. User Class
-   - **Description**: The `User` class manages a user's personal information and their interactions with places and reviews.
-   - **Methods**:
-     - `__init__(self, email, password, first_name, last_name)`: Initializes a new user with basic information.
-     - `to_dict(self)`: Converts the `User` object into a dictionary for easy JSON manipulation.
-     - `save(self)`: Saves the user to the database.
-     - `update(self, **kwargs)`: Updates the user's information.
-     - `delete(self)`: Deletes the user from the database.
+```python
+from models import User, Place, Review, Amenity
 
-   **Usage Example**:
+# ------------------ User Class ------------------
+class User:
+    def __init__(self, email, first_name, last_name):
+        self.id = None
+        self.email = email
+        self.password = password
+        self.first_name = first_name
+        self.last_name = last_name
+    
+    def save(self):
+        """Saves the user to the database."""
+        pass
 
-   ```python
-   from models import User
+    def update(self, **kwargs):
+        """Updates user information."""
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
-   # Create a new user
-   user = User(email="john.doe@example.com", password="password123", first_name="John", last_name="Doe")
-   user.save()  # Saves the user to the database
+    def delete(self):
+        """Removes the user."""
+        pass
 
-   # Update user information
-   user.update(first_name="Jonathan")
+    def to_dict(self):
+        """Returns a dictionary representation of the user."""
+        return self.__dict__
 
-   # Get user data in dictionary format
-   user_dict = user.to_dict()
-   print(user_dict)  # {'id': 1, 'email': 'john.doe@example.com', 'first_name': 'Jonathan'}
+# ------------------ Place Class ------------------
+class Place:
+    def __init__(self, name, description, user_id):
+        self.id = None
+        self.name = name
+        self.description = description
+        self.city = city
+        self.user_id = user_id
 
-   # Delete the user
-   user.delete()
+    def save(self):
+        """Saves the place."""
+        pass
 
-2. Place Class
-	•	Description: The Place class manages information about a place where users can stay.
-	•	Methods:
-	•	__init__(self, name, description, city, user_id): Initializes a new place with basic information.
-	•	to_dict(self): Converts the Place object into a dictionary for easy JSON manipulation.
-	•	save(self): Saves the place to the database.
-	•	update(self, **kwargs): Updates the place’s information.
-	•	delete(self): Deletes the place from the database.
+    def update(self, **kwargs):
+        """Updates the place."""
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
-Usage Example:
+    def delete(self):
+        """Removes the place."""
+        pass
 
-from models import Place
+    def to_dict(self):
+        """Returns a dictionary representation of the place."""
+        return self.__dict__
 
-# Create a new place
-place = Place(name="Beach House", description="A beautiful house by the sea", city="Malibu", user_id=1)
-place.save()  # Saves the place to the database
+# ------------------ Review Class ------------------
+class Review:
+    def __init__(self, text, rating, place_id, user_id):
+        self.id = None
+        self.text = text
+        self.rating = rating
+        self.place_id = place_id
+        self.user_id = user_id
 
-# Update place information
-place.update(description="A beautiful house with a pool by the sea")
+    def save(self):
+        """Saves the review."""
+        pass
 
-# Get place data in dictionary format
-place_dict = place.to_dict()
-print(place_dict)  # {'id': 1, 'name': 'Beach House', 'city': 'Malibu', 'description': 'A beautiful house with a pool by the sea'}
+    def delete(self):
+        """Removes the review."""
+        pass
 
-# Delete the place
+    def to_dict(self):
+        """Returns a dictionary representation of the review."""
+        return self.__dict__
+
+# ------------------ Amenity Class ------------------
+class Amenity:
+    def __init__(self, name):
+        self.id = None
+        self.name = name
+
+    def save(self):
+        """Saves the amenity."""
+        pass
+
+    def delete(self):
+        """Removes the amenity."""
+        pass
+
+    def to_dict(self):
+        """Returns a dictionary representation of the amenity."""
+        return self.__dict__
+
+# ------------------ Usage Examples ------------------
+
+# User Example
+user = User(email="john.doe@example.com", first_name="John", last_name="Doe")
+user.save()
+user.update(first_name="Jonathan")
+print(user.to_dict())
+user.delete()
+
+# Place Example
+place = Place(name="Beach House", description="A beautiful house by the sea", user_id=1)
+place.save()
+place.update(description="Now with a pool!")
+print(place.to_dict())
 place.delete()
 
-3. Review Class
-	•	Description: The Review class manages reviews left by users for places.
-	•	Methods:
-	•	__init__(self, text, rating, place_id, user_id): Initializes a new review.
-	•	to_dict(self): Converts the Review object into a dictionary.
-	•	save(self): Saves the review to the database.
-	•	delete(self): Deletes the review from the database.
-
-Usage Example:
-
-from models import Review
-
-# Create a new review
-review = Review(text="Great place to stay!", rating=5, place_id=1, user_id=1)
-review.save()  # Saves the review to the database
-
-# Get review data in dictionary format
-review_dict = review.to_dict()
-print(review_dict)  # {'id': 1, 'text': 'Great place to stay!', 'rating': 5}
-
-# Delete the review
+# Review Example
+review = Review(text="Amazing place!", rating=5, place_id=1, user_id=2)
+review.save()
+print(review.to_dict())
 review.delete()
 
-4. Amenity Class
-	•	Description: The Amenity class represents amenities available at places.
-	•	Methods:
-	•	__init__(self, name): Initializes a new amenity.
-	•	to_dict(self): Converts the Amenity object into a dictionary.
-	•	save(self): Saves the amenity to the database.
-	•	delete(self): Deletes the amenity from the database.
-
-Usage Example:
-
-from models import Amenity
-
-# Create a new amenity
+# Amenity Example
 amenity = Amenity(name="WiFi")
-amenity.save()  # Saves the amenity to the database
-
-# Get amenity data in dictionary format
-amenity_dict = amenity.to_dict()
-print(amenity_dict)  # {'id': 1, 'name': 'WiFi'}
-
-# Delete the amenity
+amenity.save()
+print(amenity.to_dict())
 amenity.delete()
 
 Responsibilities of the Business Logic Layer
-	•	Entity Management: The business logic layer manages entities like User, Place, Review, and Amenity, ensuring that all business rules are followed when interacting with them.
-	•	Database Interaction: The classes in this layer interact with the database through methods that save, update, retrieve, and delete entities.
-	•	Business Logic Abstraction: The business logic layer encapsulates the logic behind system operations. For example, creating a Place ensures all values are valid before saving them to the database.
-	•	Facilitating Communication with the Presentation Layer: It provides high-level methods that allow the presentation layer (API) to easily interact with the data without worrying about the complexity of database operations.
+ • Data Validation: Ensures input data is valid before saving to the database.
+ • Business Rules Enforcement: Guarantees that operations follow the required rules (e.g., only authenticated users can create places).
+ • Data Transformation: Converts database models into JSON responses for the API.
+ • Inter-layer Communication: Bridges the persistence layer and API, ensuring smooth data flow.
 
-Workflow:
+Workflow
+ 1. A user registers via the API.
+ 2. The business logic layer validates and processes the request.
+ 3. The persistence layer saves the user to the database.
+ 4. When creating a place, the system verifies the user’s existence.
+ 5. Reviews are linked to both users and places.
+ 6. Amenities can be associated with places.
 
-1.	
-The API controller (presentation layer) receives a request.
-
-2.	
-It calls the facade to perform the requested operation (create, retrieve, update, or delete an entity).
-
-3.	
-The facade calls the corresponding methods of the entity classes to perform the database operations.
-
-4.	
-The response is sent back to the presentation layer (API) to be returned to the client.
+    AUTHOR:
+  Yoruan Orta Bonilla
