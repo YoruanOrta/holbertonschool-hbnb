@@ -5,9 +5,11 @@ from app.models.base_model import BaseModel
 from app.models.user import User
 from app.models.review import Review
 from app.models.amenity import Amenity
+""" Place Module for the HBNB project """
 
 
 class Place(BaseModel):
+    """ A place to stay """
     title = Column(String(128), nullable=False)
     description = Column(Text, nullable=True)
     price = Column(Float, nullable=False)
@@ -20,6 +22,7 @@ class Place(BaseModel):
     amenities = relationship("Amenity", secondary="place_amenity", back_populates="places", lazy="select")
 
     def __init__(self, title, description, price, latitude, longitude, owner):
+        """ Constructor for Place class """
         super().__init__()
         self.title = self.validate_title("title", title)
         self.description = description if description else "No description"
@@ -53,31 +56,30 @@ class Place(BaseModel):
         }
 
 
-
     @validates('title')
     def validate_title(self, key, value):
-        """Valida que el título no esté vacío"""
+        """Validate that the title is not empty"""
         if not value or not isinstance(value, str) or value.strip() == "":
             raise ValueError("Title cannot be empty and must be a string")
         return value
 
     @validates('price')
     def validate_price(self, key, value):
-        """Valida que el precio sea un número positivo"""
+        """Validate that the price is a positive number"""
         if value is None or not isinstance(value, (int, float)) or value < 0:
             raise ValueError("Price must be a positive number")
         return value
 
     @validates('latitude')
     def validate_latitude(self, key, value):
-        """Valida que la latitud esté entre -90 y 90"""
+        """Validate that the latitude is between -90 and 90"""
         if value is None or not isinstance(value, (int, float)) or not -90 <= value <= 90:
             raise ValueError("Latitude must be between -90 and 90")
         return value
 
     @validates('longitude')
     def validate_longitude(self, key, value):
-        """Valida que la longitud esté entre -180 y 180"""
+        """Validate that the longitude is between -180 and 180"""
         if value is None or not isinstance(value, (int, float)) or not -180 <= value <= 180:
             raise ValueError("Longitude must be between -180 and 180")
         return value
