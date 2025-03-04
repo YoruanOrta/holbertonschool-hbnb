@@ -4,8 +4,10 @@ from sqlalchemy import Column, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, validates
 from datetime import datetime
 from sqlalchemy import Integer
+""" Review Module for the HBNB project """
 
 class Review(BaseModel):
+    """ Review class to store review information """
     __tablename__ = 'reviews'
     
     id = Column(String(60), primary_key=True)
@@ -34,6 +36,7 @@ from sqlalchemy.orm import relationship, validates
 from datetime import datetime
 
 class Review(BaseModel):
+    """ Review class to store review information """
     __tablename__ = 'reviews'
     
     id = Column(String(60), primary_key=True)
@@ -118,26 +121,23 @@ class Review(BaseModel):
             print(f"Exception inside to_dict(): {str(e)}")
             raise
 
-
-
-
     @validates('text')
     def validate_text(self, key, value):
-        """Valida que el texto de la reseña no esté vacío"""
+        """Validate that the review text is not empty"""
         if not value or not isinstance(value, str) or value.strip() == "":
             raise ValueError("Review text cannot be empty")
         return value
 
     @validates('user_id')
     def validate_user_id(self, key, value):
-        """Valida que el user_id sea un string válido"""
+        """Validate that the user_id is a valid string"""
         if not value or not isinstance(value, str):
             raise ValueError("User ID must be a valid string")
         return value
 
     @validates('place_id')
     def validate_place_id(self, key, value):
-        """Valida que el place_id sea un string válido"""
+        """Validate that the place_id is a valid string"""
         if not value or not isinstance(value, str):
             raise ValueError("Place ID must be a valid string")
         return value
