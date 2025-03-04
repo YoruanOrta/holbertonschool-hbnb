@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import HBnBFacade
+""" API module for reviews """
 
 
 api = Namespace('reviews', description='Review operations')
@@ -15,6 +16,7 @@ facade = HBnBFacade()
 
 @api.route('/')
 class ReviewList(Resource):
+    """ Shows a list of all reviews, and lets you POST to add new reviews """
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
@@ -53,6 +55,7 @@ class ReviewList(Resource):
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):
+    """ Show a single review item and lets you update or delete them """
     @api.response(200, 'Review details retrieved successfully')
     @api.response(404, 'Review not found')
     def get(self, review_id):
@@ -94,6 +97,7 @@ class ReviewResource(Resource):
 
 @api.route('/places/<place_id>/reviews')
 class PlaceReviewList(Resource):
+    """ Show a list of all reviews for a specific place """
     @api.response(200, 'List of reviews for the place retrieved successfully')
     @api.response(404, 'Place not found')
     def get(self, place_id):
