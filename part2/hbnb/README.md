@@ -157,9 +157,12 @@ Responsibilities of the Business Logic Layer
 Workflow
 	1.	
   The API controller (presentation layer) receives a request.
+
 	2.	
   It calls the facade to perform the requested operation (create, retrieve, update, or delete an entity).
+
 	3.	
   The facade calls the corresponding methods of the entity classes to perform the database operations.
+
 	4.	
   The response is sent back to the presentation layer (API) to be returned to the client.
