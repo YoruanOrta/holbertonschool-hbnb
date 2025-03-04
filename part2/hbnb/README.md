@@ -2,15 +2,18 @@
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Project Structure](#project-structure)
-- [Business Logic Layer](#business-logic-layer)
-  - [Entities](#entities)
-  - [Classes and Methods](#classes-and-methods)
-- [Usage Examples](#usage-examples)
-- [Responsibilities of the Business Logic Layer](#responsibilities-of-the-business-logic-layer)
-- [Workflow](#workflow)
-- [Author](#author)
+- [HBNB Project - Business Logic Layer](#hbnb-project---business-logic-layer)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Project Structure](#project-structure)
+  - [Business Logic Layer](#business-logic-layer)
+    - [Entities](#entities)
+    - [Classes and Methods](#classes-and-methods)
+    - [Place Example](#place-example)
+    - [Review Example](#review-example)
+    - [Amenity Example](#amenity-example)
+  - [Responsibilities of the Business Logic Layer](#responsibilities-of-the-business-logic-layer)
+  - [Workflow](#workflow)
 
 ---
 
@@ -146,39 +149,55 @@ class Amenity:
 
 # ------------------ Usage Examples ------------------
 
-# User Example
+## Usage Examples
+
+### User Example
+
+```python
 user = User(email="john.doe@example.com", first_name="John", last_name="Doe")
 user.save()
 user.update(first_name="Jonathan")
 print(user.to_dict())
 user.delete()
+```
 
-# Place Example
+### Place Example
+
+```python
 place = Place(name="Beach House", description="A beautiful house by the sea", user_id=1)
 place.save()
 place.update(description="Now with a pool!")
 print(place.to_dict())
 place.delete()
+```
 
-# Review Example
+### Review Example
+
+```python
 review = Review(text="Amazing place!", rating=5, place_id=1, user_id=2)
 review.save()
 print(review.to_dict())
 review.delete()
+```
 
-# Amenity Example
+### Amenity Example
+
+```python
 amenity = Amenity(name="WiFi")
 amenity.save()
 print(amenity.to_dict())
 amenity.delete()
+```
 
-Responsibilities of the Business Logic Layer
+## Responsibilities of the Business Logic Layer
+
  • Data Validation: Ensures input data is valid before saving to the database.
  • Business Rules Enforcement: Guarantees that operations follow the required rules (e.g., only authenticated users can create places).
  • Data Transformation: Converts database models into JSON responses for the API.
  • Inter-layer Communication: Bridges the persistence layer and API, ensuring smooth data flow.
 
-Workflow
+## Workflow
+
  1. A user registers via the API.
  2. The business logic layer validates and processes the request.
  3. The persistence layer saves the user to the database.
