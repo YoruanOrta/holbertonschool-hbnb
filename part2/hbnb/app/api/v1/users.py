@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask import request, jsonify
+""" API endpoints for user management """
 
 api = Namespace('users', description='User operations')
 
@@ -12,6 +13,7 @@ user_model = api.model('User', {
 
 @api.route('/')
 class UserList(Resource):
+    """Resource for user list"""
     @api.response(200, 'List of users retrieved successfully')
     def get(self):
         """Retrieve all users"""
@@ -53,6 +55,7 @@ class UserList(Resource):
 
 @api.route('/<user_id>')
 class UserResource(Resource):
+    """ Resource for user details """
     @api.response(200, 'User details retrieved successfully')
     @api.response(404, 'User not found')
     def get(self, user_id):
