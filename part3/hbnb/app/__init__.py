@@ -2,6 +2,9 @@ from flask import Flask
 from flask_restx import Api
 from app.api.v1.users import api as users_ns
 from app.api import create_api
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt()
 
 def create_app(config_class=None):
     """Create a Flask application and configure it with the API"""
@@ -18,5 +21,7 @@ def create_app(config_class=None):
 
     # Register other endpoints or API configurations
     create_api(app)
+
+    bcrypt.init_app(app)
 
     return app
