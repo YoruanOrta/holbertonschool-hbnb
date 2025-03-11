@@ -1,52 +1,43 @@
-# Introduction to Part 2: Implementation of Business Logic and API Endpoints
+Part 3: Enhanced Backend with Authentication and Database Integration
+Welcome to Part 3 of the HBnB Project, where you will extend the backend of the application by introducing user authentication, authorization, and database integration using SQLAlchemy and SQLite for development. Later, you’ll configure MySQL for production environments. In this part, you will secure the backend, introduce persistent storage, and prepare the application for a scalable, real-world deployment.
 
-In this phase of the HBnB project, you'll implement the core functionality of the application using Python and Flask. This will involve building the Presentation and Business logic layers, and defining essential classes, methods and API endpoints, based on the design developed in the previous part.
+Objectives of the Project
+Authentication and Authorization: Implement JWT-based user authentication using Flask-JWT-Extended and role-based access control with the is_admin attribute for specific endpoints.
+Database Integration: Replace in-memory storage with SQLite for development using SQLAlchemy as the ORM and prepare for MySQL or other production grade RDBMS.
+CRUD Operations with Database Persistence: Refactor all CRUD operations to interact with a persistent database.
+Database Design and Visualization: Design the database schema using mermaid.js and ensure all relationships between entities are correctly mapped.
+Data Consistency and Validation: Ensure that data validation and constraints are properly enforced in the models.
+Learning Objectives
+By the end of this part, you will:
 
-The goal is to bring the documented architecture to life by creating the project structure, develop the business logic, and implement key functionality such as managing users, places, reviews, and amenities.
+Implement JWT authentication to secure your API and manage user sessions.
+Enforce role-based access control to restrict access based on user roles (regular users vs. administrators).
+Replace in-memory repositories with a SQLite-based persistence layer using SQLAlchemy for development and configure MySQL for production.
+Design and visualize a relational database schema using mermaid.js to handle relationships between users, places, reviews, and amenities.
+Ensure the backend is secure, scalable, and provides reliable data storage for production environments.
+Project Context
+In the previous parts of the project, you worked with in-memory storage, which is ideal for prototyping but insufficient for production environments. In Part 3, you’ll transition to SQLite, a lightweight relational database, for development, while preparing the system for MySQL in production. This will give you hands-on experience with real-world database systems, allowing your application to scale effectively.
 
-## Project Vision and Scope
+Additionally, you’ll introduce JWT-based authentication to secure the API, ensuring that only authenticated users can interact with certain endpoints. You will also implement role-based access control to enforce restrictions based on the user’s privileges (regular users vs. administrators).
 
-This part is focused on creating a functional and scalable foundation for the application. You will be working on:
+Project Resources
+Here are some resources that will guide you through this part of the project:
 
-- **Business Logic Layer:** Building the core models and logic that drive the application's functionality. This includes defining relationships, handling data validation, and managing interactions between different components.
+JWT Authentication: Flask-JWT-Extended Documentation
+SQLAlchemy ORM: SQLAlchemy Documentation
+SQLite: SQLite Documentation
+Flask Documentation: Flask Official Documentation
+Mermaid.js for ER Diagrams: Mermaid.js Documentation
+Structure of the Project
+In this part of the project, the tasks are organized in a way that builds progressively towards a complete, secure, and database-backed backend system:
 
-- **Presentation Layer:** Defining the services and API endpoints using Flask and `flask-restx`. You will structure the endpoints logically, ensuring clear paths and parameters for each operation.
+Modify the User Model to Include Password: You will start by modifying the User model to store passwords securely using bcrypt2 and update the user registration logic.
+Implement JWT Authentication: Secure the API using JWT tokens, ensuring only authenticated users can access protected endpoints.
+Implement Authorization for Specific Endpoints: You will implement role-based access control to restrict certain actions (e.g., admin-only actions).
+SQLite Database Integration: Transition from in-memory data storage to SQLite as the persistent database during development.
+Map Entities Using SQLAlchemy: Map existing entities (User, Place, Review, Amenity) to the database using SQLAlchemy and ensure relationships are well-defined.
+Prepare for MySQL in Production: Towards the end of this phase, you’ll configure the application to use MySQL in production and SQLite for development.
+Database Design and Visualization: Use mermaid.js to create entity-relationship diagrams for your database schema.
+Each task is carefully designed to build on previous work and ensure the system transitions smoothly from development to production readiness.
 
-## Learning Objectives
-
-This part of the project is designed to help you achieve the following learning outcomes:
-
-1. **Set Up the Project Structure:**
-
-    - Organize the project into a modular architecture, following best practices for Python and Flask applications.
-    - Create the necessary packages for the Presentation and Business Logic layers.
-
-2. **Implement the Business Logic Layer:**
-
-    Understand how to translate documented designs into working code by:
-
-    - Develop the core classes for the business logic, including User, Place, Review, and Amenity entities.
-    - Implement relationships between entities and define how they interact within the application.
-    - Implement the facade pattern to simplify communication between the Presentation and Business Logic layers.
-
-3. **Build RESTful API Endpoints:**
-
-    - Implement the necessary API endpoints to handle CRUD operations for Users, Places, Reviews, and Amenities.
-    - Use `flask-restx` to define and document the API, ensuring a clear and consistent structure.
-    - Implement data serialization to return extended attributes for related objects. For example, when retrieving a Place, the API should include details such as the owner's `first_name`, `last_name`, and relevant amenities.
-
-4. **Test and Validate the API:**
-
-    - Write tests to validate the behavior of the business logic classes.
-    - Ensure that the API responses are consistent with the expected behavior.
-    - Ensure that each endpoint works correctly and handles edge cases appropriately.
-
-### Recommended Resources
-
-- [Flask Official Documentation](https://flask.palletsprojects.com/)
-- [flask-restx Documentation](https://flask-restx.readthedocs.io/)
-- [Best Practices for Designing a Pragmatic RESTful API](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
-- [REST API Tutorial](https://restfulapi.net/)
-- [Structuring Your Python Project](https://docs.python-guide.org/writing/structure/)
-- [Modular Programming with Python](https://realpython.com/python-modules-packages/)
-- [Facade Pattern in Python](https://refactoring.guru/design-patterns/facade/python/example)
+By the end of Part 3, you will have a backend that not only stores data in a persistent and secure database but also ensures that only authorized users can access and modify specific data. You will have implemented industry-standard authentication and database management practices that are crucial for real-world web applications.
