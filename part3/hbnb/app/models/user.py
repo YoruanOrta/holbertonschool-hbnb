@@ -2,6 +2,7 @@ import re
 from sqlalchemy import Column, String, Boolean
 from sqlalchemy.orm import relationship, validates
 from app.models.base_model import BaseModel
+import bcrypt
 """ User module """
 
 class User(BaseModel):
@@ -39,3 +40,11 @@ class User(BaseModel):
         if value and value.strip() == "":
             raise ValueError(f"{key} cannot be empty")
         return value
+    
+    def hash_password(self, password):
+        """Hashes the password before storing it."""
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def verify_password(self, password):
+        """Verifies if the provided password matches the hashed password."""
+        return bcrypt.check_password_hash(self.password, password)
