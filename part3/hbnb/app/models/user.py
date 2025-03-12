@@ -3,7 +3,10 @@ from sqlalchemy import Column, String, Boolean
 from sqlalchemy.orm import relationship, validates
 from app.models.base_model import BaseModel
 import bcrypt
+from flask_bcrypt import Bcrypt
 """ User module """
+
+bcrypt = Bcrypt()
 
 class User(BaseModel):
     """ User class """
@@ -13,8 +16,9 @@ class User(BaseModel):
     is_admin = Column(Boolean, nullable=False, default=False)
     places = relationship('Place', backref='user', cascade='all, delete')
     reviews = relationship('Review', backref='user', cascade='all, delete')
+    password = Column(String(256), nullable=False)
 
-    def __init__(self, email, first_name=None, last_name=None, is_admin=False):
+    def __init__(self, email, password, first_name=None, last_name=None, is_admin=False):
         """ Constructor """
         super().__init__()
         if not self.validate_email(email):
@@ -24,9 +28,8 @@ class User(BaseModel):
         self.last_name = self.validate_names("last_name", last_name)
         self.is_admin = is_admin
 
-        if not self.validate_email(email):
-            raise ValueError("Invalid email format")
-        self.email = email
+        if password:
+            self.hash_password(password)
 
     @staticmethod
     def validate_email(email):
