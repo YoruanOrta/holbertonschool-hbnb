@@ -46,22 +46,19 @@ class UserList(Resource):
             return {'error': 'Email already registered'}, 400
 
         try:
-            # Hash the password before storing it
-            hashed_password = bcrypt.generate_password_hash(user_data['password']).decode('utf-8')
-
-            user_data.pop('password')
 
             # Create user with hashed password
-            new_user = facade.create_user({
-                'first_name': user_data['first_name'],
-                'last_name': user_data['last_name'],
-                'email': user_data['email'],
-                'password': hashed_password
-            })
+            new_user = facade.create_user(user_data)
+            
 
             # Return only user ID and success message
-            return {'id': new_user.id, 'message': 'User registered successfully'}, 201
-        
+            return {
+                'id': new_user.id,
+                'first_name': new_user.first_name,
+                'last_name': new_user.last_name,
+                'email': new_user.email,
+                }, 201
+
         except ValueError as e:
             return {'error': 'Invalid input data'}, 400
 

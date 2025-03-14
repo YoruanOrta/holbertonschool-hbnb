@@ -30,9 +30,10 @@ class HBnBFacade:
         """Create a new user and store in storage"""
         print(f"Received user data: {user_data}")
         new_user = User(**user_data)
-        self.storage.save(new_user)
+        new_user.hash_password(user_data['password'])
+        self.user_repo.add(new_user)
         return new_user
-    
+
     def delete_user(self, user_id):
         """Delete a user by ID."""
         user = self.storage.get(User, user_id)

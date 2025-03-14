@@ -1,10 +1,11 @@
 import uuid
 from app.models.user import User
+from app.persistence import InMemoryRepository
 """ Models module """
 
-class MemoryStorage:
+class MemoryStorage(InMemoryRepository):
     """Temporary in-memory storage"""
-    
+
     def __init__(self):
         self.data = {}
 
