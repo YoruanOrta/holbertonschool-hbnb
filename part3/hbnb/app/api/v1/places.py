@@ -1,10 +1,11 @@
 from flask_restx import Namespace, Resource, fields
-from flask import jsonify, request
+from flask import request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.facade import HBnBFacade
+
 """ API module for places """
 
 api = Namespace('places', description='Place operations')
-
 facade = HBnBFacade()
 
 amenity_model = api.model('PlaceAmenity', {
@@ -41,31 +42,41 @@ place_model = api.model('Place', {
 @api.route('/')
 class PlaceList(Resource):
     """Shows a list of all places and lets you POST to add new places"""
+    
+    def get(self):
+        """Retrieve a list of all places (Public Access)"""
+        places = facade.get_all_places()
+        return places, 200
+
     @api.expect(place_model)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
+    @jwt_required()
     def post(self):
-        """Register a new place"""
+        """Register a new place (Authenticated Users Only)"""
+        current_user = get_jwt_identity()
+        print(f"JWT Identity Retrieved: {current_user}")
+
         place_data = request.get_json()
+
+        place_data["owner_id"] = current_user if isinstance(current_user, str) else current_user["id"]
+
+        print(f"Place Data: {place_data}")
+
         try:
             new_place = facade.create_place(place_data)
             return new_place, 201
         except ValueError as e:
             return {"error": str(e)}, 400
 
-    @api.response(200, 'List of places retrieved successfully')
-    def get(self):
-        """Retrieve a list of all places"""
-        places = facade.get_all_places()
-        return places, 200
-
 @api.route('/<place_id>')
 class PlaceResource(Resource):
     """Show a single place item and lets you update it"""
+
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
     def get(self, place_id):
-        """Get place details by ID"""
+        """Get place details by ID (Public Access)"""
         place = facade.get_place(place_id)
         if not place:
             return {"error": "Place not found"}, 404
@@ -74,15 +85,38 @@ class PlaceResource(Resource):
     @api.expect(place_model)
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
-    @api.response(400, 'Invalid input data')
+    @api.response(403, 'Unauthorized action')
+    @jwt_required()
     def put(self, place_id):
-        """Update a place's information"""
+        """Update a place's information (Only Owner)"""
+        current_user = get_jwt_identity()
+        place = facade.get_place(place_id)
+
+        if not place:
+            return {"error": "Place not found"}, 404
+        if place["owner_id"] != current_user:
+            return {"error": "Unauthorized action"}, 403
+
         place_data = request.get_json()
-        
         try:
             updated_place = facade.update_place(place_id, place_data)
-            if not updated_place:
-                return {"error": "Place not found"}, 404
             return updated_place, 200 
         except ValueError as e:
             return {"error": str(e)}, 400
+
+    @api.response(204, 'Place deleted successfully')
+    @api.response(404, 'Place not found')
+    @api.response(403, 'Unauthorized action')
+    @jwt_required()
+    def delete(self, place_id):
+        """Delete a place (Only Owner)"""
+        current_user = get_jwt_identity()
+        place = facade.get_place(place_id)
+
+        if not place:
+            return {"error": "Place not found"}, 404
+        if place["owner_id"] != current_user["id"]:
+            return {"error": "Unauthorized action"}, 403
+
+        facade.delete_place(place_id)
+        return {}, 204

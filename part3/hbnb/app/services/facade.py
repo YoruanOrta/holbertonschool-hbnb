@@ -1,9 +1,9 @@
 from app.persistence.repository import InMemoryRepository
 from app.models import storage
 from app.models.user import User
-from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.review import Review
+from app.models.amenity import Amenity
 from flask import jsonify
 import uuid
 from datetime import datetime
@@ -32,6 +32,7 @@ class HBnBFacade:
         new_user = User(**user_data)
         new_user.hash_password(user_data['password'])
         self.user_repo.add(new_user)
+        self.storage.save(new_user)
         return new_user
 
     def delete_user(self, user_id):
@@ -77,7 +78,15 @@ class HBnBFacade:
 
     def create_place(self, place_data):
         """Create a new place with validation"""
-        owner = self.storage.get(User, place_data.get("owner_id"))
+        owner_id = place_data.get("owner_id")
+        print(f"🔍 Retrieving User with ID: {owner_id}")  # Debugging line
+
+        all_users = self.storage.all(User)  # Debugging line
+        print(f"👥 All Users: {all_users}")
+
+        owner = self.storage.get(User, owner_id)  
+        print(f"🔎 Found User: {owner}")  # Debugging line
+
         if not owner:
             raise ValueError("Owner not found")
 
