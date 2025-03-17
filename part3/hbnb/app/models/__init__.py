@@ -10,21 +10,24 @@ class MemoryStorage:
 
     def get(self, model, obj_id):
         """Gets an object by ID"""
-        print(f"🔍 Retrieving {model.__name__} with ID: {obj_id}")
-        return self.data.get(obj_id)
+        print(f"Retrieving {model.__name__} with ID: {obj_id}")
+        obj = self.data.get(obj_id)
+        if obj and isinstance(obj, model):
+            return obj
+        return None
 
     def save(self, obj):
         """Saves an object in memory"""
         if not hasattr(obj, 'id') or obj.id is None:
             obj.id = str(uuid.uuid4())
-        
+
         print(f"Saving {obj.__class__.__name__} with ID: {obj.id}")
         self.data[obj.id] = obj
 
     def delete(self, obj):
         """Deletes an object by its ID"""
         if obj.id in self.data:
-            print(f"🗑️ Deleting {obj.__class__.__name__} with ID: {obj.id}")
+            print(f"Deleting {obj.__class__.__name__} with ID: {obj.id}")
             del self.data[obj.id]
 
     def all(self, model=None):

@@ -60,7 +60,7 @@ class Review(BaseModel):
         print(f"Assigned ID to review: {self.id}")
 
     def to_dict(self):
-        """Convert Review object to a dictionary with debugging"""
+        """Convert Review object to a dictionary without nested objects"""
         print(f"Debugging to_dict() - Review ID: {self.id}")
 
         if not hasattr(self, "id") or not self.id:
@@ -76,32 +76,6 @@ class Review(BaseModel):
             print(f"   - Created At: {self.created_at}")
             print(f"   - Updated At: {self.updated_at}")
 
-            print("Checking user relationship...")
-            user_dict = None
-            if self.user is not None:
-                try:
-                    user_dict = {
-                        "id": str(self.user.id) if hasattr(self.user, "id") else None,
-                        "first_name": getattr(self.user, "first_name", None),
-                        "last_name": getattr(self.user, "last_name", None),
-                        "email": getattr(self.user, "email", None)
-                    }
-                except Exception as e:
-                    print(f"Error fetching user details: {str(e)}")
-
-            print("Checking place relationship...")
-            place_dict = None
-            if self.place is not None:
-                try:
-                    place_dict = {
-                        "id": str(self.place.id) if hasattr(self.place, "id") else None
-                    }
-                except Exception as e:
-                    print(f"Error fetching place details: {str(e)}")
-
-            print(f"User data: {user_dict}")
-            print(f"Place data: {place_dict}")
-
             review_dict = {
                 "id": str(self.id),
                 "text": self.text,
@@ -110,8 +84,6 @@ class Review(BaseModel):
                 "user_id": self.user_id,
                 "created_at": self.created_at.isoformat(),
                 "updated_at": self.updated_at.isoformat(),
-                "user": user_dict,
-                "place": place_dict
             }
 
             print(f"Successfully converted to dict: {review_dict}")

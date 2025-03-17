@@ -1,7 +1,8 @@
 from flask_restx import Namespace, Resource, fields
-from flask import request
+from flask import request , jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.facade import HBnBFacade
+from app.services.review_service import ReviewService
 
 """ API module for reviews """
 
@@ -15,6 +16,7 @@ review_model = api.model('Review', {
 })
 
 facade = HBnBFacade()
+review_service = ReviewService(facade.storage)
 
 @api.route('/')
 class ReviewList(Resource):
@@ -87,7 +89,7 @@ class ReviewResource(Resource):
 
         if not review:
             return {'error': 'Review not found'}, 404
-        if review["user_id"] != current_user:
+        if review.user_id != current_user:
             return {'error': 'Unauthorized action'}, 403
 
         review_data = request.get_json()
@@ -102,17 +104,31 @@ class ReviewResource(Resource):
     @api.response(403, 'Unauthorized action')
     @jwt_required()
     def delete(self, review_id):
-        """Delete a review (Only the author can delete)"""
-        current_user = get_jwt_identity()
-        review = facade.get_review(review_id)
+        """Delete a review by ID"""
 
-        if not review:
-            return {'error': 'Review not found'}, 404
-        if review["user_id"] != current_user:
-            return {'error': 'Unauthorized action'}, 403
+        # Get the current user's ID from the JWT token
+        current_user_id = get_jwt_identity()
 
-        facade.delete_review(review_id)
-        return {}, 204
+        try:
+            # Fetch the review using the ReviewService
+            review = review_service.get_review(review_id)
+
+            # Check if the review exists
+            if not review:
+                return jsonify({"message": f"Review with ID {review_id} not found"}), 404
+
+            # Check if the current user is the owner of the review
+            if review.user_id != current_user_id:
+                return jsonify({"message": "You are not authorized to delete this review"}), 403
+
+            # Proceed with deleting the review using ReviewService
+            review_service.delete_review(review_id, current_user_id)
+
+            # ✅ Return an empty response with 204 No Content (no jsonify)
+            return '', 204
+
+        except ValueError as e:
+            return jsonify({"message": str(e)}), 400
 
 @api.route('/places/<place_id>/reviews')
 class PlaceReviewList(Resource):

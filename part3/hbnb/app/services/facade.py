@@ -79,13 +79,8 @@ class HBnBFacade:
     def create_place(self, place_data):
         """Create a new place with validation"""
         owner_id = place_data.get("owner_id")
-        print(f"🔍 Retrieving User with ID: {owner_id}")  # Debugging line
-
-        all_users = self.storage.all(User)  # Debugging line
-        print(f"👥 All Users: {all_users}")
 
         owner = self.storage.get(User, owner_id)  
-        print(f"🔎 Found User: {owner}")  # Debugging line
 
         if not owner:
             raise ValueError("Owner not found")
@@ -118,7 +113,19 @@ class HBnBFacade:
         )
 
         self.storage.save(new_place)
-        return new_place.to_dict()
+
+        # Only return the fields you want
+        place_dict = {
+            "id": new_place.id,
+            "title": new_place.title,
+            "description": new_place.description,
+            "price": new_place.price,
+            "latitude": new_place.latitude,
+            "longitude": new_place.longitude,
+            "owner_id": new_place.owner.id
+        }
+
+        return place_dict
 
     def update_place(self, place_id, place_data):
         """Update an existing place"""
@@ -126,10 +133,13 @@ class HBnBFacade:
         if not place:
             return None
 
+        # Update the place attributes with the new data
         for key, value in place_data.items():
             setattr(place, key, value)
 
-        self.storage.save()
+        # Save the updated place in storage
+        self.storage.save(place)  # Pass the updated place object here
+
         return {"message": "Place updated successfully"}
 
     def get_all_places(self):
@@ -187,10 +197,27 @@ class HBnBFacade:
             stored_review = self.storage.get(Review, new_review.id)
 
             print(f"Successfully created review: {stored_review}")
-            return stored_review
+            return stored_review.to_dict()
 
         except Exception as e:
             print(f"Error creating review: {str(e)}")
+            raise
+
+    def get_review(self, review_id):
+        """Fetch a review by its ID."""
+        # Assuming `self.storage` is your in-memory storage or database
+        review = next((r for r in self.storage.all(Review).values() if r.id == review_id), None)
+        if not review:
+            raise ValueError(f"Review with ID {review_id} not found.")
+        return review
+
+    def save_review(self, review):
+        """Save a review to storage"""
+        try:
+            print(f"Saving review: {review.id}")
+            self.storage.save(review)
+        except Exception as e:
+            print(f"Error saving review: {str(e)}")
             raise
 
     def get_all_reviews(self):
@@ -208,15 +235,28 @@ class HBnBFacade:
             print(f"Error retrieving reviews: {str(e)}")
             raise
 
-    def delete_review(self, review_id):
-        """Delete a review by ID"""
-        review = self.storage.get(Review, review_id)
+    def update_review(self, review_id, review_data):
+        """Update the review with new data."""
+        review = self.get_review(review_id)
         if not review:
-            raise ValueError(f"Review with ID {review_id} not found")
+            raise ValueError(f"Review with ID {review_id} not found.")
         
-        self.storage.delete(review)
-        self.storage.save()
-        return {"message": "Review deleted successfully"}
+        # Update fields in the review
+        review.text = review_data.get("text", review.text)
+        review.rating = review_data.get("rating", review.rating)
+
+        # You can implement the saving logic if necessary
+        self.save_review(review)  # Persist the updated review
+
+        return review.to_dict()  # Assuming you have a `to_dict` method to return a dictionary
+
+    def get_review_by_user_and_place(self, user_id, place_id):
+        """Retrieve a review by user ID and place ID"""
+        reviews = self.storage.all(Review).values()  # Get all reviews from storage
+        for review in reviews:
+            if review.user_id == user_id and review.place_id == place_id:
+                return review  # Return the first matching review
+        return None  # No review found
 
 #------------------------------------------------------------AMENITIES-----------------------------------------------------------------
 
