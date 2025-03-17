@@ -8,7 +8,6 @@ amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
 })
 
-
 @api.route("/")
 class AmenityList(Resource):
     """Resource for creating and retrieving amenities"""

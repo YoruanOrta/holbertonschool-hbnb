@@ -10,13 +10,15 @@ bcrypt = Bcrypt()
 
 class User(BaseModel):
     """ User class """
+    __tablename__ = 'users'
+
     email = Column(String(128), nullable=False, unique=True)
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
-    is_admin = Column(Boolean, nullable=False, default=False)
     places = relationship('Place', backref='user', cascade='all, delete')
     reviews = relationship('Review', backref='user', cascade='all, delete')
     password = Column(String(256), nullable=False)
+    is_admin = Column(Boolean, default=False)
 
     def __init__(self, email, password, first_name=None, last_name=None, is_admin=False):
         """ Constructor """
