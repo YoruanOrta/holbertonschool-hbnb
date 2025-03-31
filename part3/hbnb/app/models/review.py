@@ -28,35 +28,6 @@ class Review(BaseModel):
         if not hasattr(self, "id") or not self.id:
             self.id = str(uuid.uuid4())
 
-
-    import uuid
-from app.models.base_model import BaseModel
-from sqlalchemy import Column, String, ForeignKey, DateTime, Integer
-from sqlalchemy.orm import relationship, validates
-from datetime import datetime
-
-class Review(BaseModel):
-    """ Review class to store review information """
-    __tablename__ = 'reviews'
-    
-    id = Column(String(60), primary_key=True)
-    text = Column(String(1024), nullable=False)
-    rating = Column(Integer, nullable=False)
-    place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    place = relationship('Place', back_populates='reviews')
-    user = relationship('User', back_populates='reviews')
-
-    def __init__(self, **kwargs):
-        """Ensure ID is generated correctly"""
-        super().__init__(**kwargs)
-
-        if not hasattr(self, "id") or not self.id:
-            self.id = str(uuid.uuid4())
-
         print(f"Assigned ID to review: {self.id}")
 
     def to_dict(self):
