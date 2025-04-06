@@ -1,35 +1,31 @@
 import re
-from sqlalchemy import Column, String, Text, Float, ForeignKey
+from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.orm import relationship, validates
 from app.models.base_model import BaseModel
-from app.models.user import User
-from app.models.review import Review
-from app.models.amenity import Amenity
+from app.extensions import db
 """ Place Module for the HBNB project """
 
+place_amenities = db.Table(
+    'place_amenities',
+    Column('place_id', Integer, ForeignKey('places.id'), primary_key=True),
+    Column('amenity_id', Integer, ForeignKey('amenities.id'), primary_key=True)
+)
 
-class Place(BaseModel):
+class Place(BaseModel, db.Model):
     """ A place to stay """
-    title = Column(String(128), nullable=False)
-    description = Column(Text, nullable=True)
-    price = Column(Float, nullable=False)
-    latitude = Column(Float, nullable=False)
-    longitude = Column(Float, nullable=False)
+    __tablename__ = 'places'
+
+    title = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.String(1024), nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+
+    owner = db.relationship("User", back_populates="places")
     owner_id = Column(String(60), ForeignKey('users.id'), nullable=False)
 
-    owner = relationship("User", back_populates="places")
     reviews = relationship("Review", back_populates="place", cascade="all, delete", lazy="select")
-    amenities = relationship("Amenity", secondary="place_amenity", back_populates="places", lazy="select")
-
-    def __init__(self, title, description, price, latitude, longitude, owner):
-        """ Constructor for Place class """
-        super().__init__()
-        self.title = self.validate_title("title", title)
-        self.description = description if description else "No description"
-        self.price = self.validate_price("price", price)
-        self.latitude = self.validate_latitude("latitude", latitude)
-        self.longitude = self.validate_longitude("longitude", longitude)
-        self.owner = owner
+    amenities = relationship("Amenity", secondary="place_amenities", back_populates="places", lazy="select")
 
     def to_dict(self):
         """Convert Place object to a dictionary"""

@@ -42,11 +42,6 @@ class ReviewList(Resource):
         if place["owner_id"] == current_user:
             return {'error': 'You cannot review your own place'}, 403
 
-        # Prevent users from reviewing the same place multiple times
-        existing_review = facade.get_review_by_user_and_place(current_user, review_data["place_id"])
-        if existing_review:
-            return {'error': 'You have already reviewed this place'}, 409
-
         try:
             new_review = facade.create_review(review_data)
             return new_review, 201

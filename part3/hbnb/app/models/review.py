@@ -1,38 +1,22 @@
-import uuid
+from app.extensions import db
 from app.models.base_model import BaseModel
-from sqlalchemy import Column, String, ForeignKey, DateTime
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, validates
-from datetime import datetime
 from sqlalchemy import Integer
 """ Review Module for the HBNB project """
 
-class Review(BaseModel):
+class Review(BaseModel, db.Model):
     """ Review class to store review information """
     __tablename__ = 'reviews'
-    
-    id = Column(String(60), primary_key=True)
-    text = Column(String(1024), nullable=False)
-    rating = Column(Integer, nullable=False)
-    place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    reviews = relationship("Review", back_populates="place", cascade="all, delete", lazy="joined")
-    place = relationship('Place', back_populates='reviews')
-    user = relationship('User', back_populates='reviews')
 
-    def __init__(self, **kwargs):
-        """Ensure ID is generated correctly"""
-        super().__init__(**kwargs)
-        if not hasattr(self, "id") or not self.id:
-            self.id = str(uuid.uuid4())
-
-        print(f"Assigned ID to review: {self.id}")
+    text = db.Column(String(1024), nullable=False)
+    rating = db.Column(Integer, nullable=False)
+    place_id = db.Column(String(60), ForeignKey('places.id'), nullable=False)
+    user_id = db.Column(String(60), ForeignKey('users.id'), nullable=False)
+    place = relationship("Place", back_populates="reviews")
 
     def to_dict(self):
         """Convert Review object to a dictionary without nested objects"""
-        print(f"Debugging to_dict() - Review ID: {self.id}")
 
         if not hasattr(self, "id") or not self.id:
             print("Error: Review ID is missing!")
@@ -84,3 +68,6 @@ class Review(BaseModel):
         if not value or not isinstance(value, str):
             raise ValueError("Place ID must be a valid string")
         return value
+    
+    def __repr__(self):
+        return f"<Review {self.id} - Rating: {self.rating}>"

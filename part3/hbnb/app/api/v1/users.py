@@ -47,15 +47,15 @@ class UserList(Resource):
         try:
 
             # Create user with hashed password
-            new_user = facade.create_user(user_data)
+            user = facade.create_user(user_data)
             
 
             # Return only user ID and success message
             return {
-                'id': new_user.id,
-                'first_name': new_user.first_name,
-                'last_name': new_user.last_name,
-                'email': new_user.email,
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
                 }, 201
 
         except ValueError as e:

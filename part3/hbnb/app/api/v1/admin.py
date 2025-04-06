@@ -65,12 +65,12 @@ class AdminUserCreate(Resource):
         user_data["is_admin"] = True
 
         try:
-            new_user = facade.create_user(user_data)
+            user = facade.create_user(user_data)
             return {
-                'id': new_user.id,
-                'first_name': new_user.first_name,
-                'last_name': new_user.last_name,
-                'email': new_user.email
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email
             }, 201
         except (ValueError, TypeError, AssertionError) as e:
             return {"error": str(e)}, 400
