@@ -1,211 +1,192 @@
-# HBNB Project - Business Logic Layer
+# HBnB Project
 
-## Table of Contents
+## Overview
 
-- [HBNB Project - Business Logic Layer](#hbnb-project---business-logic-layer)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Project Structure](#project-structure)
-  - [Business Logic Layer](#business-logic-layer)
-    - [Entities](#entities)
-    - [Classes and Methods](#classes-and-methods)
-    - [Place Example](#place-example)
-    - [Review Example](#review-example)
-    - [Amenity Example](#amenity-example)
-  - [Responsibilities of the Business Logic Layer](#responsibilities-of-the-business-logic-layer)
-  - [Workflow](#workflow)
-  - [AUTHOR](#author)
-
----
-
-## Introduction
-
-The **HBNB** project is a system for managing users, places, reviews, and amenities in an accommodation service.  
-This document describes the **Business Logic Layer (BLL)**, which handles data processing, entity management, and interactions between the API and the database.
+HBnB is a scalable web application built using Flask, following a layered architecture with clear separation of concerns: API (presentation), services (business logic), and persistence (data access). The goal is to build a modular, testable, and production-ready backend system, starting with an in-memory repository and transitioning to a database using SQLAlchemy.
 
 ---
 
 ## Project Structure
 
-The project follows a **layered architecture**:
-
-1. **Presentation Layer** – The API (Flask) that handles HTTP requests.
-2. **Business Logic Layer (BLL)** – Processes data and enforces business rules.
-3. **Persistence Layer** – Uses SQLAlchemy for database management.
-
-The **Business Logic Layer** acts as an intermediary, ensuring that all operations comply with business rules.
+```
+hbnb/
+├── app/
+│   ├── __init__.py               # Initialize Flask app
+│   ├── api/                      # REST API endpoints
+│   │   ├── __init__.py
+│   │   └── v1/
+│   │       ├── __init__.py
+│   │       ├── users.py
+│   │       ├── places.py
+│   │       ├── reviews.py
+│   │       ├── amenities.py
+│   ├── models/                   # Business entities
+│   │   ├── __init__.py
+│   │   ├── user.py
+│   │   ├── place.py
+│   │   ├── review.py
+│   │   ├── amenity.py
+│   ├── services/                 # Facade and logic layer
+│   │   ├── __init__.py
+│   │   └── facade.py
+│   ├── persistence/              # Repositories (in-memory/SQLAlchemy)
+│   │   ├── __init__.py
+│   │   └── repository.py
+├── run.py                        # Application entry point
+├── config.py                     # Environment configs
+├── requirements.txt              # Project dependencies
+├── README.md
+```
 
 ---
 
-## Business Logic Layer
+## Setup Instructions
 
-### Entities
+### Clone the project
 
-The main entities in the system are:
+```bash
+git clone <your-repo-url>
+cd hbnb
+```
 
-| Entity   | Description |
-|----------|------------|
-| **User** | Manages user accounts, authentication, and interactions. |
-| **Place** | Represents accommodations like apartments, houses, and hotels. |
-| **Review** | Stores user-generated reviews for places. |
-| **Amenity** | Represents features available in places (e.g., WiFi, Pool). |
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-### Classes and Methods
+## Running the App
 
-```python
-from models import User, Place, Review, Amenity
+Start the Flask app with:
 
-# ------------------ User Class ------------------
-class User:
-    def __init__(self, email, first_name, last_name):
-        self.id = None
-        self.email = email
-        self.password = password
-        self.first_name = first_name
-        self.last_name = last_name
-    
-    def save(self):
-        """Saves the user to the database."""
-        pass
-
-    def update(self, **kwargs):
-        """Updates user information."""
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-    def delete(self):
-        """Removes the user."""
-        pass
-
-    def to_dict(self):
-        """Returns a dictionary representation of the user."""
-        return self.__dict__
-
-# ------------------ Place Class ------------------
-class Place:
-    def __init__(self, name, description, user_id):
-        self.id = None
-        self.name = name
-        self.description = description
-        self.city = city
-        self.user_id = user_id
-
-    def save(self):
-        """Saves the place."""
-        pass
-
-    def update(self, **kwargs):
-        """Updates the place."""
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-    def delete(self):
-        """Removes the place."""
-        pass
-
-    def to_dict(self):
-        """Returns a dictionary representation of the place."""
-        return self.__dict__
-
-# ------------------ Review Class ------------------
-class Review:
-    def __init__(self, text, rating, place_id, user_id):
-        self.id = None
-        self.text = text
-        self.rating = rating
-        self.place_id = place_id
-        self.user_id = user_id
-
-    def save(self):
-        """Saves the review."""
-        pass
-
-    def delete(self):
-        """Removes the review."""
-        pass
-
-    def to_dict(self):
-        """Returns a dictionary representation of the review."""
-        return self.__dict__
-
-# ------------------ Amenity Class ------------------
-class Amenity:
-    def __init__(self, name):
-        self.id = None
-        self.name = name
-
-    def save(self):
-        """Saves the amenity."""
-        pass
-
-    def delete(self):
-        """Removes the amenity."""
-        pass
-
-    def to_dict(self):
-        """Returns a dictionary representation of the amenity."""
-        return self.__dict__
-
-# ------------------ Usage Examples ------------------
-
-## Usage Examples
-
-User Example
-
-```python
-user = User(email="john.doe@example.com", first_name="John", last_name="Doe")
-user.save()
-user.update(first_name="Jonathan")
-print(user.to_dict())
-user.delete()
+```bash
+python run.py
 ```
 
-### Place Example
+You can test the API at `http://localhost:5000/api/v1/`.
+
+---
+
+## Configuration
+
+`config.py`:
 
 ```python
-place = Place(name="Beach House", description="A beautiful house by the sea", user_id=1)
-place.save()
-place.update(description="Now with a pool!")
-print(place.to_dict())
-place.delete()
+import os
+
+class Config:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
+    DEBUG = False
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+config = {
+    'development': DevelopmentConfig,
+    'default': DevelopmentConfig
+}
 ```
 
-### Review Example
+Environment selection is handled in `run.py`.
 
-```python
-review = Review(text="Amazing place!", rating=5, place_id=1, user_id=2)
-review.save()
-print(review.to_dict())
-review.delete()
+---
+
+## Features
+
+- RESTful API using Flask and Flask-RESTX
+- Clean architecture (API → Services → Persistence)
+- Facade pattern to decouple layers
+- In-memory repository (transition to SQLAlchemy)
+- JWT-based Authentication (using Flask-JWT-Extended)
+- Role-based access control
+- Relational modeling with SQLAlchemy:
+  - One-to-many: User → Place, Place → Review
+  - Many-to-many: Place ↔ Amenity
+- Proper validation and error handling
+- Unit tests with `unittest`
+
+---
+
+## Running Tests
+
+To run unit tests:
+
+```bash
+python -m unittest discover tests
 ```
 
-### Amenity Example
+Tests cover all layers: API, services, and persistence.
 
-```python
-amenity = Amenity(name="WiFi")
-amenity.save()
-print(amenity.to_dict())
-amenity.delete()
-```
+---
 
-## Responsibilities of the Business Logic Layer
+## Dependencies
 
- • Data Validation: Ensures input data is valid before saving to the database.
- • Business Rules Enforcement: Guarantees that operations follow the required rules (e.g., only authenticated users can create places).
- • Data Transformation: Converts database models into JSON responses for the API.
- • Inter-layer Communication: Bridges the persistence layer and API, ensuring smooth data flow.
+`requirements.txt`:
 
-## Workflow
+- flask
+- flask-restx
+- flask-jwt-extended
+- sqlalchemy
 
- 1. A user registers via the API.
- 2. The business logic layer validates and processes the request.
- 3. The persistence layer saves the user to the database.
- 4. When creating a place, the system verifies the user’s existence.
- 5. Reviews are linked to both users and places.
- 6. Amenities can be associated with places.
+---
 
-## AUTHOR
+## Future Enhancements
 
-  Yoruan Orta Bonilla
+- Replace in-memory repo with full SQLAlchemy ORM implementation
+- Add filtering and searching endpoints
+- Enable pagination and sorting
+- Implement user registration and login endpoints
+- Add Swagger UI documentation (with Flask-RESTX)
+- Deploy with Docker and Gunicorn
+- Add integration and load testing
+
+---
+
+## Key Design Patterns Used
+
+- **Facade Pattern**: HBnBFacade provides a unified interface to underlying services and repositories.
+- **Repository Pattern**: Abstracts data access (in-memory or database) from business logic.
+- **JWT Authentication**: Provides secure, stateless login/session mechanism.
+- **Layered Architecture**: Promotes separation of concerns, modularity, and testability.
+
+---
+
+## Example Endpoints
+
+- `GET /api/v1/places` - List all places
+- `POST /api/v1/places` - Create new place (JWT required)
+- `GET /api/v1/places/<place_id>` - Get place details
+- `PUT /api/v1/places/<place_id>` - Update a place (ownership validated)
+- `GET /api/v1/amenities` - List all amenities
+- `PUT /api/v1/places/<place_id>/amenities/<amenity_id>` - Link amenity to place
+
+---
+
+## Authentication & Authorization
+
+- Basic login using JWT
+- Token returned after valid login
+- Users can only update/delete their own resources
+- Admin endpoints protected via roles
+
+---
+
+## Inspiration
+
+This project is inspired by Holberton School’s HBnB architecture but redesigned for modern development practices and extensibility.
+
+---
+
+## Clean Code & Style
+
+- Code follows `pycodestyle`
+- Organized by responsibility and scalability
+- Meaningful naming and concise documentation
+
+---
+
+## Author
+
+Yoruan Orta
