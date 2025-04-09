@@ -1,4 +1,3 @@
-/* Reset y estilos básicos */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,7 +13,7 @@ body {
     flex-direction: column;
 }
 
-/* Cabecera */
+/* header */
 header {
     background-color: #ff9800;
     color: #fff;
@@ -42,8 +41,8 @@ header {
 .navbar {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Align items to the left */
-    width: 100%; /* Ensure the navbar stretches across the full width */
+    justify-content: flex-start;
+    width: 100%;
 }
 
 #login-link {
@@ -51,18 +50,18 @@ header {
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: bold;
-    margin-left: auto; /* This will move the login link to the left */
+    margin-left: auto;
     padding: 0.1rem 2rem;
 }
-/* Enlaces de navegación */
 
+/* nav link */
 nav a {
     color: #fff;
     text-decoration: none;
     margin-left: 1rem;
 }
 
-/* Contenido principal */
+/* main content */
 main {
     padding: 2rem;
     flex: 1;
@@ -90,7 +89,6 @@ main {
     border: 1px solid #ddd;
 }
 
-/* Contenedor de tarjetas */
 .places-container {
     display: flex;
     flex-wrap: wrap;
@@ -98,7 +96,6 @@ main {
     justify-content: center;
 }
 
-/* Tarjetas de alojamiento */
 .place-card {
     background-color: #fff;
     border-radius: 10px;
@@ -132,10 +129,13 @@ main {
     background-color: #e68a00;
 }
 
-/* Pie de página */
+/* Footer */
 footer {
-    padding: 1rem;
+    background-color: #ff9800;
+    color: #fff;
+    padding: 1.5rem;
     text-align: center;
+    width: 100%;
     margin-top: auto;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
 }
