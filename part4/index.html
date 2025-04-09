@@ -3,26 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List of Places</title>
+    <title>Places</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <nav>
+        <nav class="navbar">
+            <img src="logo.png" alt="Logo" class="logo">
             <a href="login.html" id="login-link">Login</a>
         </nav>
     </header>
+
     <main>
-        <section id="filter">
-            <label for="price-filter">Max Price:</label>
-            <select id="price-filter">
-                <!-- Options will be populated dynamically -->
-            </select>
-        </section>
+        <h1>Available Places</h1>
         <section id="places-list">
-            <!-- List of places will be populated dynamically -->
+            <div class="filter-section">
+                <label for="price-filter">Max Price:</label>
+                <select id="price-filter">
+                    <option value="all">All</option>
+                    <option value="50">$50</option>
+                    <option value="100">$100</option>
+                    <option value="200">$200</option>
+                </select>
+            </div>
+
+            <div class="places-container">
+                <div class="place-card">
+                    <h2>Beautiful Beach House</h2>
+                    <p>Price per night: $150</p>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+                
+                <div class="place-card">
+                    <h2>Cozy Cabin</h2>
+                    <p>Price per night: $100</p>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+
+                <div class="place-card">
+                    <h2>Modern Apartment</h2>
+                    <p>Price per night: $200</p>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
         </section>
     </main>
+
+    <footer>
+        <p>All rights reserved.</p>
+    </footer>
+
     <script src="scripts.js"></script>
 </body>
 </html>

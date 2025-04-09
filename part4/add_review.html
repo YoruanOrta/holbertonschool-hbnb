@@ -7,19 +7,37 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <img src="logo.png" alt="Logo" class="logo">
+            <a href="login.html" id="login-link" class="login-button">Login</a>
+        </nav>
+    </header>
     <main>
-        <!-- Add something to idfentify the place you're reviewing -->
-        <form id="review-form">
+        <section class="place-info">
+            <h3>Reviewing: <span id="place-name">Loading...</span></h3>
+        </section>
+        <form id="review-form" class="add-review">
             <h2>Add a Review</h2>
             <label for="review">Your Review:</label>
             <textarea id="review" name="review" required></textarea>
+
             <label for="rating">Rating:</label>
             <select id="rating" name="rating" required>
-                <!-- Options for rating -->
+                <option value="">Select Rating</option>
+                <option value="1">1 - Very Bad</option>
+                <option value="2">2 - Bad</option>
+                <option value="3">3 - Okay</option>
+                <option value="4">4 - Good</option>
+                <option value="5">5 - Excellent</option>
             </select>
+
             <button type="submit">Submit Review</button>
         </form>
     </main>
+    <footer>
+        <p>All rights reserved.</p>
+    </footer>
     <script src="scripts.js"></script>
 </body>
 </html>

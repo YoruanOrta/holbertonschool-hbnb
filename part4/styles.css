@@ -1,8 +1,4 @@
-/* 
-  This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks. 
-  You'll probably need to override some of theese styles.
-*/
-
+/* Reset y estilos básicos */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -11,15 +7,54 @@
 }
 
 body {
-    background-color: #f4f4f4;
+    background-color: #f8f8f8;
     color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Cabecera */
 header {
-    background-color: #333;
+    background-color: #ff9800;
     color: #fff;
     padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align items to the left */
+    width: 100%; /* Ensure the navbar stretches across the full width */
+}
+
+#login-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: auto; /* This will move the login link to the left */
+    padding: 0.1rem 2rem;
+}
+/* Enlaces de navegación */
 
 nav a {
     color: #fff;
@@ -27,6 +62,80 @@ nav a {
     margin-left: 1rem;
 }
 
+/* Contenido principal */
 main {
     padding: 2rem;
+    flex: 1;
+}
+
+.main-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+/* Filtros */
+.filter-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-section select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* Contenedor de tarjetas */
+.places-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+/* Tarjetas de alojamiento */
+.place-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    text-align: center;
+    width: 300px;
+}
+
+.place-card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.place-card p {
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+.view-details-btn {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.view-details-btn:hover {
+    background-color: #e68a00;
+}
+
+/* Pie de página */
+footer {
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+    font-size: 0.9rem;
 }

@@ -7,23 +7,31 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main>
-        <section id="place-details">
-            <!-- Place details will be populated dynamically -->
+    <header>
+        <nav>
+            <img src="logo.png" alt="Logo" class="logo">
+            <a href="login.html" id="login-link">Login</a>
+        </nav>
+    </header>
+
+    <main class="place-details">
+        <section class="place-info" id="place-info">
         </section>
-        <section id="reviews">
-            <!-- Reviews will be populated dynamically -->
+
+        <section id="reviews-section">
+            <h2>Reviews</h2>
+            <div id="reviews-list">
+            </div>
         </section>
-        <section id="add-review">
-            <h2>Add a Review</h2>
-            <form id="review-form">
-                <label for="review-text">Review:</label>
-                <textarea id="review-text" name="review-text" required></textarea>
-                
-                <button type="submit">Submit</button>
-            </form>
+
+        <section id="review-action">
         </section>
     </main>
+
+    <footer>
+        <p>All rights reserved.</p>
+    </footer>
+
     <script src="scripts.js"></script>
 </body>
 </html>
