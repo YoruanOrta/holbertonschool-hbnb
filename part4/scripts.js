@@ -36,62 +36,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-
     // ===== PLACE DETAILS =====
     else if (path.includes('place.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const placeId = urlParams.get('id');
-        const placeDetails = document.querySelector('#place-details');
-        const reviewsContainer = document.querySelector('#reviews');
-
-        if (placeId && placeDetails) {
-            const place = {
-                id: placeId,
-                name: 'Cozy Cabin',
-                host: 'Alice',
-                price: 80,
-                description: 'A cozy cabin in the woods',
-                amenities: ['WiFi', 'Fireplace', 'Kitchen']
-            };
-
-            placeDetails.innerHTML = `
-                <div class="place-details">
-                    <div class="place-info">
-                        <h1>${place.name}</h1>
-                        <p><strong>Host:</strong> ${place.host}</p>
-                        <p><strong>Price:</strong> $${place.price}/night</p>
-                        <p><strong>Description:</strong> ${place.description}</p>
-                        <p><strong>Amenities:</strong> ${place.amenities.join(', ')}</p>
-                    </div>
-                </div>
-            `;
-
-            const reviews = [
-                { user: 'John', comment: 'Great place!', rating: 5 },
-                { user: 'Emma', comment: 'Really cozy and clean.', rating: 4 }
-            ];
-
-            reviews.forEach(review => {
-                const div = document.createElement('div');
-                div.className = 'review-card';
-                div.innerHTML = `
-                    <div class="username">${review.user}</div>
-                    <div class="rating">Rating: ${review.rating}/5</div>
-                    <p>${review.comment}</p>
+        if (path.includes('place.html')) {
+            const params = new URLSearchParams(window.location.search);
+            const placeId = params.get('id');
+        
+            fetchPlaceDetails(placeId);
+            fetchPlaceReviews(placeId);
+        
+            const user = localStorage.getItem('user');
+            if (user) {
+                const reviewAction = document.getElementById('review-action');
+                reviewAction.innerHTML = `
+                <a href="add_review.html?id=${placeId}" class="add-review-button">Add Review</a>
                 `;
-                reviewsContainer.appendChild(div);
-            });
-
-            const isLoggedIn = localStorage.getItem('user');
-            if (isLoggedIn) {
-                const addReviewBtn = document.createElement('a');
-                addReviewBtn.href = `add_review.html?id=${placeId}`;
-                addReviewBtn.textContent = 'Add a Review';
-                addReviewBtn.className = 'details-button';
-                document.querySelector('#add-review-btn').appendChild(addReviewBtn);
+            }
             }
         }
-    }
 
     // ===== ADD REVIEW PAGE =====
     else if (path.includes('add_review.html')) {
@@ -127,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-
     // ===== LOGIN PAGE =====
     else if (path.includes('login.html')) {
         const loginForm = document.querySelector('#login-form');
@@ -144,7 +107,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Redirects from the "View Details" button"
-function viewPlace(id) {
-    window.location.href = `place.html?id=${id}`;
+function fetchPlaceDetails(placeId) {
+    const placesList = document.getElementById('places-list');
+    fetch(`/api/v1/places/${placeId}`)
+        .then(response => response.json())
+        .then(place => {
+            document.getElementById('Place').textContent = place.name;
+            document.title = `${place.name} - Hbnb`;
+
+        const html = `
+            <div class="info-row"><strong>Price:</strong> $${place.price_per_night}</div>
+            <div class="info-row"><strong>Description:</strong> ${place.description}</div>
+        `;
+    document.getElementById('place-info').innerHTML = html;
+    })
+    .catch(error => {
+        console.error('Error loading place details:', error);
+    });
+}
+
+function fetchPlaceReviews(placeId) {
+    fetch(`/api/v1/places/${placeId}/reviews`)
+        .then(response => response.json())
+        .then(reviews => {
+            const reviewsList = document.getElementById('reviews-list');
+            let html = '';
+
+            reviews.forEach(review => {
+            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+            html += `
+                <div class="review-card">
+                    <div class="reviewer-name">${review.user || 'Anonymous'}</div>
+                    <div class="review-text">${review.text}</div>
+                    <div class="review-rating">${stars}</div>
+                </div>
+            `;
+        });
+
+        reviewsList.innerHTML = html;
+    })
+    .catch(error => {
+        console.error('Error loading reviews:', error);
+    });
 }
