@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
 
-    // ===== INDEX: SHOW PLACES =====
     if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
         const placesContainer = document.querySelector('#places-container');
 
@@ -24,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Change login to logout
         const loginLink = document.querySelector('#login-link');
         const user = localStorage.getItem('user');
         if (loginLink && user) {
@@ -36,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-    // ===== PLACE DETAILS =====
+
     else if (path.includes('place.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const placeId = urlParams.get('id');
@@ -57,41 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-    // ===== ADD REVIEW PAGE =====
-    else if (path.includes('add_review.html')) {
-        const form = document.querySelector('#review-form');
-        const urlParams = new URLSearchParams(window.location.search);
-        const placeId = urlParams.get('id');
-
-        const select = document.querySelector('#rating');
-        if (select) {
-            for (let i = 1; i <= 5; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                select.appendChild(option);
-            }
-        }
-
-        if (form) {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const reviewText = form.review.value;
-                const rating = form.rating.value;
-                const user = localStorage.getItem('user') || 'Guest';
-
-                console.log('Review Submitted:', {
-                    placeId,
-                    review: reviewText,
-                    rating,
-                    user
-                });
-
-                window.location.href = `place.html?id=${placeId}`;
-            });
-        }
-    }
-    // ===== LOGIN PAGE =====
     else if (path.includes('login.html')) {
         const loginForm = document.querySelector('#login-form');
 
@@ -107,8 +70,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+    const form = document.getElementById("add_review.html");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const review = document.getElementById("review").value.trim();
+        const rating = document.getElementById("rating").value;
+
+        if (!review || !rating) {
+            alert("Please fill in all fields.");
+            return;
+        }
+        console.log("Submitted review:", {
+            review: review,
+            rating: rating,
+        });
+
+        form.reset();
+});
+
 function fetchPlaceDetails(placeId) {
-    const placesList = document.getElementById('places-list');
+    const placesList = document.getElementById('places.html');
     fetch(`/api/v1/places/${placeId}`)
         .then(response => response.json())
         .then(place => {

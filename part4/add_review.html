@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Review</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <img src="logo.png" alt="Logo" class="logo">
-            <a href="login.html" id="login-link" class="login-button">Login</a>
-        </nav>
-    </header>
-    <main>
-        <section class="place-info">
-            <h3>Reviewing: <span id="place-name">Loading...</span></h3>
-        </section>
-        <form id="review-form" class="add-review">
-            <h2>Add a Review</h2>
-            <label for="review">Your Review:</label>
-            <textarea id="review" name="review" required></textarea>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Add Review</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <img src="logo.png" alt="Logo" class="logo-img" />
+                <a href="login.html" id="login-link">Login</a>
+            </nav>
+        </header>
 
+    <main>
+        <section class="place-details">
+            <h1 class="main-title">Add Your Review</h1>
+
+            <form id="review-form">
+            <div class="form-group">
+            <label for="review">Your Review:</label>
+            <textarea id="review" name="review" rows="5" required></textarea>
+            </div>
+
+            <div class="form-group">
             <label for="rating">Rating:</label>
             <select id="rating" name="rating" required>
-                <option value="">Select Rating</option>
-                <option value="1">1 - Very Bad</option>
-                <option value="2">2 - Bad</option>
-                <option value="3">3 - Okay</option>
-                <option value="4">4 - Good</option>
-                <option value="5">5 - Excellent</option>
+                <option value="1">1 ★</option>
+                <option value="2">2 ★★</option>
+                <option value="3">3 ★★★</option>
+                <option value="4">4 ★★★★</option>
+                <option value="5">5 ★★★★★</option>
             </select>
-
-            <button type="submit">Submit Review</button>
+            </div>
+            <button type="submit" class="login-button">Submit Review</button>
         </form>
+        </section>
     </main>
+
     <footer>
         <p>&copy; 2024 HBnB Evolution. All rights reserved.</p>
     </footer>
+
     <script src="scripts.js"></script>
-</body>
+    </body>
 </html>

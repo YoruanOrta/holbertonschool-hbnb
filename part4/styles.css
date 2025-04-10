@@ -82,7 +82,6 @@ main {
     background: white;
     padding: 3rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 2rem;
 }
 
@@ -92,11 +91,6 @@ main {
     border-radius: 6px;
     margin-bottom: 1rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.review-rating {
-    color: gold;
-    font-size: 1.2rem;
 }
 
 .add-review-button {
@@ -124,6 +118,26 @@ main {
     padding: 0.5rem;
     border-radius: 4px;
     border: 1px solid #ddd;
+}
+
+option {
+    font-size: 1.2rem;
+    color: #f39c12;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
 }
 
 .places-container {
