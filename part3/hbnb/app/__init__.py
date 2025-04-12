@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restx import Api
 from flask_bcrypt import Bcrypt
 from app.extensions import db, bcrypt
@@ -18,6 +19,7 @@ def create_app(config_class=DevelopmentConfig):
     """Create a Flask application and configure it with the API"""
 
     app = Flask(__name__)
+    CORS(app, supports_credentials=True)
     app.config.from_object(config_class)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hbnb.db'  
