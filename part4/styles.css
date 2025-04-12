@@ -255,6 +255,18 @@ select {
     text-decoration: underline;
 }
 
+/* Styles for errors messages */
+.error-message {
+    color: #e74c3c;
+    background-color: #fadbd8;
+    border: 1px solid #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
 /* Footer */
 footer {
     background-color: #ff9800;
