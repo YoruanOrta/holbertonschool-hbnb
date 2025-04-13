@@ -85,6 +85,43 @@ main {
     margin-bottom: 2rem;
 }
 
+/* Estilos para el nombre de usuario y botones de logout */
+#logout-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 1rem;
+    padding: 0.1rem 2rem;
+}
+
+#user-info {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-left: 1rem;
+    font-weight: normal;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+/* Mejorar visibilidad del mensaje de error */
+.error-message {
+    color: #e74c3c;
+    background-color: #fadbd8;
+    border: 1px solid #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    display: none; /* Oculto por defecto */
+}
+
 .review-card {
     background: white;
     padding: 0.75rem;
