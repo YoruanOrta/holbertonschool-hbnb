@@ -8,25 +8,31 @@
 </head>
 <body>
     <header>
-        <div class="navbar">
+        <nav class="navbar">
             <img src="logo.png" alt="Logo" class="logo">
+            <a href="index.html" class="home-button">Home</a>
             <a href="login.html" id="login-link">Login</a>
-        </div>
+            <a href="#" id="logout-link" style="display: none;">Logout</a>
+            <span id="user-info" style="display: none;"></span>
+        </nav>
     </header>
 
-    <main class="place-details">
-        <h1 class="main-title" id="Places">Places</h1>
-
-        <section class="place-info" id="place-info">
+    <main>
+        <h1 class="place-title">Loading place details...</h1>
+        
+        <section id="place-details">
+            <div class="loading">Loading place details...</div>
         </section>
-
+        
         <section id="reviews-section">
-            <h2 class="reviews-title">Reviews</h2>
+            <h2>Reviews</h2>
             <div id="reviews-list">
+                <div class="loading">Loading reviews...</div>
             </div>
         </section>
-
-        <section id="review-action">
+        
+        <section id="add-review-section">
+            <!-- Este contenido será generado dinámicamente en JavaScript -->
         </section>
     </main>
 
