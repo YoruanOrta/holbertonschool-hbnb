@@ -1,10 +1,11 @@
+/* This is a placeholder for additional styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
 }
-
+/* Body */
 body {
     background-color: #f8f8f8;
     color: #333;
@@ -148,21 +149,14 @@ main {
     color: #333;
 }
 
-/* Estilos para el nombre de usuario y botones de logout */
+/* Styles for the username and logout buttons */
 #logout-link {
     color: #ffffff;
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: bold;
-    margin-left: 1rem;
+    margin-left: auto;
     padding: 0.1rem 2rem;
-}
-
-#user-info {
-    color: #ffffff;
-    font-size: 1.2rem;
-    margin-left: 1rem;
-    font-weight: normal;
 }
 
 .loading {
@@ -187,7 +181,7 @@ main {
     background-color: #e0e0e0;
 }
 
-/* Mejorar visibilidad del mensaje de error */
+/* Improve visibility of the error message */
 .error-message {
     color: #e74c3c;
     background-color: #fadbd8;
@@ -197,7 +191,7 @@ main {
     margin-bottom: 15px;
     text-align: center;
     font-weight: bold;
-    display: none; /* Oculto por defecto */
+    display: none;
 }
 
 .review-card {
@@ -311,7 +305,7 @@ main {
     background-color: #f57c00;
 }
 
-/* Filtros */
+/* Filters */
 .filter-section {
     text-align: center;
     margin-bottom: 2rem;

@@ -1,8 +1,9 @@
+// Handles authentication, place display/filtering, details, and reviews.
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificar autenticación y actualizar la UI
+    // Check authentication and update the UI
     updateAuthUI();
     
-    // Configurar formulario de login si está en la página login
+    // Set up login form if on the login page
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Si estamos en la página principal, mostrar lugares de muestra y configurar filtro
+    // If we are on the main page, display sample places and set up the filter
     if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
         displaySamplePlaces();
         
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Si estamos en la página de detalles de un lugar, cargar los datos
+    // If we are on the place details page, load the data
     if (window.location.pathname.includes('place.html')) {
         const placeId = getPlaceIdFromURL();
         if (placeId) {
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Configurar botón de logout
+    // Set up logout button
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
         logoutLink.addEventListener('click', function(e) {
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Función para mostrar lugares de muestra
+// Function to display sample places
 function displaySamplePlaces() {
     const placesContainer = document.getElementById('places-container');
     if (!placesContainer) return;
@@ -67,26 +68,26 @@ function displaySamplePlaces() {
         </div>
     `;
     
-    // Configurar los botones de "View Details" después de crear las tarjetas
+    // Set up the "View Details" buttons after creating the cards
     setupViewDetailsButtons();
 }
 
-// Función para configurar los botones "View Details"
+// Function to set up "View Details" buttons
 function setupViewDetailsButtons() {
     const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
     
     viewDetailsButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Obtener el ID del lugar desde el atributo data-id
+            // Get the place ID from the data-id attribute
             const placeId = this.getAttribute('data-id');
             
-            // Redirigir a la página de detalles (sin verificar autenticación)
+            // Redirect to the details page (without checking authentication)
             window.location.href = `place.html?id=${placeId}`;
         });
     });
 }
 
-// Función para actualizar la UI basada en el estado de autenticación
+// Function to update the UI based on authentication state
 function updateAuthUI() {
     const token = localStorage.getItem('token');
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -96,7 +97,7 @@ function updateAuthUI() {
     const userInfo = document.getElementById('user-info');
     
     if (token) {
-        // Usuario autenticado
+        // Authenticated user
         if (loginLink) loginLink.style.display = 'none';
         if (logoutLink) logoutLink.style.display = 'inline-block';
         if (userInfo) {
@@ -104,14 +105,14 @@ function updateAuthUI() {
             userInfo.textContent = userData.email || 'Usuario';
         }
     } else {
-        // Usuario no autenticado
+        // Unauthenticated user
         if (loginLink) loginLink.style.display = 'inline-block';
         if (logoutLink) logoutLink.style.display = 'none';
         if (userInfo) userInfo.style.display = 'none';
     }
 }
 
-// Función para iniciar sesión
+// Function to log in
 function loginUser() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -130,14 +131,14 @@ function loginUser() {
         return response.json();
     })
     .then(data => {
-        // Guardar token y datos del usuario
+        // Save token and user data
         localStorage.setItem('token', data.token);
         localStorage.setItem('userData', JSON.stringify({
             id: data.user_id,
             email: email
         }));
         
-        // Redirigir a la página principal
+        // Redirect to the main page
         window.location.href = 'index.html';
     })
     .catch(error => {
@@ -146,20 +147,19 @@ function loginUser() {
     });
 }
 
-// Función para cerrar sesión
+// Function to log out
 function logoutUser() {
-    // Eliminar token y datos del usuario
+    // Remove token and user data
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     
-    // Actualizar la UI
+    // Update the UI
     updateAuthUI();
-    
-    // Opcionalmente, recargar la página para actualizar cualquier contenido protegido
+
     window.location.reload();
 }
 
-// Función para filtrar lugares por precio
+// Function to filter places by price
 function filterPlacesByPrice(selectedPrice) {
     const placesContainer = document.getElementById('places-container');
     if (!placesContainer) return;
@@ -178,16 +178,14 @@ function filterPlacesByPrice(selectedPrice) {
     });
 }
 
-// Función para obtener el ID del lugar desde la URL
+// Function to get the place ID from the URL
 function getPlaceIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
 }
 
-// Función para obtener los detalles del lugar
+// Function to fetch the place details
 function fetchPlaceDetails(placeId) {
-    // Para el propósito de esta muestra, usamos datos locales
-    // En producción, esto debería ser una llamada a tu API
     const samplePlaceData = {
         1: {
             id: 1,
@@ -239,7 +237,7 @@ function fetchPlaceDetails(placeId) {
         }
     };
 
-    // Simular una llamada a la API
+    // Simulate an API call
     setTimeout(() => {
         if (samplePlaceData[placeId]) {
             displayPlaceDetails(samplePlaceData[placeId]);
@@ -249,50 +247,19 @@ function fetchPlaceDetails(placeId) {
             window.location.href = 'index.html';
         }
     }, 500);
-
-    // En producción, deberías usar el siguiente código en lugar del código de simulación anterior
-    /*
-    const token = localStorage.getItem('token');
-    const headers = {
-        'Content-Type': 'application/json'
-    };
-    
-    // Añadir token de autenticación si existe
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-    
-    fetch(`http://localhost:5000/api/v1/places/${placeId}`, {
-        method: 'GET',
-        headers: headers
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to fetch place details');
-        }
-        return response.json();
-    })
-    .then(data => {
-        displayPlaceDetails(data);
-    })
-    .catch(error => {
-        console.error('Error fetching place details:', error);
-        alert('Failed to load place details. Please try again later.');
-    });
-    */
 }
 
-// Función para mostrar los detalles del lugar
+// Function to display place details
 function displayPlaceDetails(placeData) {
     document.title = placeData.name || 'Place Details';
     
-    // Actualizar el título principal
+    // Update the main title
     const placeTitle = document.querySelector('.place-title');
     if (placeTitle) {
         placeTitle.textContent = placeData.name;
     }
     
-    // Actualizar detalles del lugar
+    // Update place details
     const placeDetails = document.getElementById('place-details');
     if (placeDetails) {
         placeDetails.innerHTML = `
@@ -307,11 +274,11 @@ function displayPlaceDetails(placeData) {
         `;
     }
     
-    // Mostrar reseñas
+    // Display reviews
     displayReviews(placeData.reviews || []);
 }
 
-// Función para mostrar amenidades
+// Function to display amenities
 function displayAmenities(amenities) {
     if (!amenities || amenities.length === 0) {
         return 'No amenities listed';
@@ -320,7 +287,7 @@ function displayAmenities(amenities) {
     return amenities.map(amenity => amenity.name).join(', ');
 }
 
-// Función para mostrar reseñas
+// Function to display reviews
 function displayReviews(reviews) {
     const reviewsSection = document.getElementById('reviews-section');
     if (!reviewsSection) return;
@@ -347,7 +314,7 @@ function displayReviews(reviews) {
     });
 }
 
-// Función para mostrar estrellas de calificación
+// Function to display rating stars
 function displayStars(rating) {
     const fullStar = '★';
     const emptyStar = '☆';
@@ -364,7 +331,7 @@ function displayStars(rating) {
     return stars;
 }
 
-// Función para configurar el formulario de reseñas
+// Function to set up the review form
 function setupReviewForm() {
     const token = localStorage.getItem('token');
     const reviewFormSection = document.getElementById('add-review-section');
@@ -372,14 +339,14 @@ function setupReviewForm() {
     if (!reviewFormSection) return;
     
     if (!token) {
-        // Usuario no autenticado, mostrar mensaje
+        // Unauthenticated user, display message
         reviewFormSection.innerHTML = `
             <p>Please <a href="login.html">login</a> to add a review.</p>
         `;
         return;
     }
     
-    // Usuario autenticado, mostrar formulario
+    // Authenticated user, display form
     reviewFormSection.innerHTML = `
         <h2>Add a Review</h2>
         <form id="review-form">
@@ -401,14 +368,14 @@ function setupReviewForm() {
         </form>
     `;
     
-    // Configurar el evento de envío del formulario
+    // Set up the form submission event
     const reviewForm = document.getElementById('review-form');
     if (reviewForm) {
         reviewForm.addEventListener('submit', submitReview);
     }
 }
 
-// Función para enviar una reseña
+// Function to submit a review
 function submitReview(e) {
     e.preventDefault();
     
@@ -421,41 +388,10 @@ function submitReview(e) {
         alert('You must be logged in to submit a review.');
         return;
     }
-    
-    // Para producción, descomentar y adaptar este código
-    /*
-    fetch(`http://localhost:5000/api/v1/places/${placeId}/reviews`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            text: reviewText,
-            rating: parseInt(rating)
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to submit review');
-        }
-        return response.json();
-    })
-    .then(data => {
-        alert('Review submitted successfully!');
-        // Recargar la página para mostrar la nueva reseña
-        location.reload();
-    })
-    .catch(error => {
-        console.error('Error submitting review:', error);
-        alert('Failed to submit review. Please try again later.');
-    });
-    */
-    
-    // Para propósitos de demostración
+
     alert('Review submitted successfully! (Demo mode)');
     
-    // Simular una nueva reseña
+    // Simulate a new review
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
     const reviewsList = document.getElementById('reviews-list');
     
@@ -468,11 +404,11 @@ function submitReview(e) {
             <p class="rating">Rating: ${displayStars(parseInt(rating))}</p>
         `;
         
-        // Añadir la nueva reseña al principio de la lista
+        // Add the new review to the beginning of the list
         reviewsList.insertBefore(newReview, reviewsList.firstChild);
     }
     
-    // Limpiar el formulario
+    // Clear the form
     document.getElementById('review-text').value = '';
     document.getElementById('rating').value = '5';
 }
